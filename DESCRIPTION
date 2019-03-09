@@ -2,8 +2,8 @@ Package: genofeatutil
 Type: Package
 Title: Utilities for genomic feature manipulation
 Version: 0.1.0
-Author@R: person("Yen-Chung", "Chen", email = "ycc520@nyu.edu")
-Maintainer@R: person("Yen-Chung", "Chen", email = "ycc520@nyu.edu")
+Authors@R: person("Yen-Chung", "Chen", email = "ycc520@nyu.edu", 
+                  role = c("aut", "cre"))
 Description:
   To streamline analysis for NGS data, genofeatutil converts drosophila gene names and 
   FlyBase id numbers to a consistent version. 

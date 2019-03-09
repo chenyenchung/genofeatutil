@@ -20,10 +20,3 @@ a named list with 3 items ("fbid", "syno", and "dirstr")
 to check available version. If not otherwise specified, it will generate
 dowdload URLs for table for FlyBase ID and Synonym.
 }
-\examples{
-# This retrieves the URLs for the up-to-date version
-get_fbase_url()
-
-# This gets the FB2019_01 version
-get_fbase_url(version = "FB2019_01")
-}

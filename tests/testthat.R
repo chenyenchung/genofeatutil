@@ -1,4 +1,4 @@
 library(testthat)
-library(featureutil)
+library(genofeatutil)
 
-test_check("featureutil")
+test_check("genofeatutil")

@@ -9,13 +9,6 @@
 #' @param dirstr a list returned by \code{get_fbase_url()}
 #'
 #' @return a named list with 3 items ("fbid", "syno", and "dirstr")
-#'
-#' @examples
-#' # This retrieves the URLs for the up-to-date version
-#' get_fbase_url()
-#'
-#' # This gets the FB2019_01 version
-#' get_fbase_url(version = "FB2019_01")
 get_fbase_url <- function(version = NULL, dirstr = NULL) {
   if (!is.null(dirstr)) {
     filelist <- dirstr[["dirstr"]]

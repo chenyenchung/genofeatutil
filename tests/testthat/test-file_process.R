@@ -1,6 +1,7 @@
 context("test-file_process")
 
-test_that("Loading works", {
+# load_rdata() ------------------------------------------------------------
+test_that("load_rdata()", {
   # Create a temporary .RData file to load
   dummy_df <- data.frame("a" = c(1:5),
                          "b" = c("A", "B", "C", "D", "E"))
@@ -22,6 +23,7 @@ test_that("Stopping at multiple objects works", {
   expect_error(load_rdata(file = tempobj))
 })
 
+# versaread() -------------------------------------------------------------
 test_that("Versaread calls load_rdata()", {
   # Create a temporary .RData file to load
   tempobj <- tempfile()

@@ -1,5 +1,6 @@
 context("test-fetch_flybase")
 
+# get_fbase_url() ---------------------------------------------------------
 test_that("URL retrieval", {
   # To make sure the URLs retrieved are correct
   urls <- get_fbase_url()
@@ -22,6 +23,7 @@ test_that("URL retrieval", {
   expect_error(get_fbase_url("FB1800_13", dirstr = urls))
 })
 
+# fetch_flybase() ---------------------------------------------------------
 test_that("Custom URL and the retrieved table structure", {
   # Provide URLs directly to prevent multiple access to FlyBase FTP site
   # This test script will call get_fbase_url() for 4 times if we don't

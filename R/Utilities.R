@@ -1,9 +1,9 @@
 #' Generate a Tuning Series of \code{mtry} for \code{randomForest()}
 #'
-#' \code{\link{randomForest}()} implements a default value for mtry determined
-#' by the number of predictors used. To examine the influence of mtry on
-#' prediction accuracy, \code{make_mtry_series()} takes predictor and response
-#' matrices and generate a series of mtry for use in a tune grid.
+#' \code{\link[randomForest]{randomForest}()} implements a default value for
+#' mtry determined by the number of predictors used. To examine the influence
+#' of mtry on prediction accuracy, \code{make_mtry_series()} takes predictor
+#' and response matrices and generate a series of mtry for use in a tune grid.
 #' Let default value be N, \code{make_mtry_series()} makes a numeric vector
 #' consisting 10, N/2, N, 2N, and the number of predictors provided.
 #' the number of predictors.
@@ -58,7 +58,7 @@ make_mtry_series <- function(x, y) {
 #'
 #' @examples
 #' genedf <- data.frame("a" = c(1:10),
-#'                      "b" = c(6:14))
+#'                      "b" = c(6:15))
 #' calculate_gene_cor(genedf, "a", "b")
 calculate_gene_cor <- function(data, gene1, gene2,
                                use.row = FALSE, method = "pearson") {
@@ -99,7 +99,9 @@ calculate_gene_cor <- function(data, gene1, gene2,
 #' Seurat object. For a martix or data frame, you need to tell it whether the
 #' gene names are in row names or column names. If it's a Seurat object,
 #' you'll need to specify the assay you want.
-#' @param x an object to extract gene names from
+#' @param x an object (matrix, data frame, or Seuratv3 object) to extract gene
+#' names from
+#' @param ... other arguments passing to S3 methods (see below)
 #'
 #' @return a character vector
 #' @export
@@ -126,7 +128,6 @@ get_gene_names <- function(x, ...) {
   UseMethod("get_gene_names", x)
 }
 
-#' @param x an expression matrix
 #' @param use.row a logical constant indicating whether the gene names are in
 #' row names or not
 #'
@@ -142,10 +143,7 @@ get_gene_names.default <- function(x, use.row = FALSE) {
   return(colnames(x))
 }
 
-#' @param object a Seuratv3 object
 #' @param assay a character string indicating an assay in the Seurat object
-#' @param slot a character string indicating a data slot in the Seurat object
-#' (Options: \code{counts}, \code{data}, or \code{scale.data})
 #'
 #' @rdname get_gene_names
 get_gene_names.Seurat <- function(x, assay = "RNA") {
