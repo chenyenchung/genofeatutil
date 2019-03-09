@@ -1,0 +1,76 @@
+# normalize_path <- function(path) {
+#   # Because this script creates a working directory
+#   # so relative paths in settings will fail unless prepended "../"
+#   if (!grepl("^\\/", path)) {path <- paste0("../", path)}
+#   return(path)
+# }
+
+
+
+#' Loading .RData files allowing assignment to an variable
+#'
+#' \code{\link{save}()} allows saving multiple R objects from the environment for later use.
+#' One caveat of its default behavior is that when the .RData file is loaded,
+#' it retains its variable name, which could collide with something else that is
+#' already in the environment. \code{load_rdata()} loads .RData to the function environment,
+#' makes sure their is only one object loaded, and return it to allow assignment to
+#' another variable name upon loading.
+#' @param file The path of the desired Rdata file
+#'
+#' @return An R object
+#' @export
+#'
+#' @examples
+#' save(iris, "~/iris.RData")
+#' iris_reload <- load_rdata(file = "~/iris.RData")
+load_rdata <- function(file) {
+  # Allow assignment of .rdata files arbitrarily to a variable
+  # in contrast to its original behavior to a fixed name when it was saved
+  ## Record the environment before loading
+  current_envir <- c(ls(), "current_envir")
+  load(file)
+  ## Assume the new variable in the environment is the loaded object
+  obj_name <- setdiff(ls(), current_envir)
+  ## Remind the user if more than one variable is in the file.
+  if (length(obj_name) > 1) {
+    stop("This .rdata file contains more than 1 object and is likely to be an environment. Please load it with load().")
+  }
+  ## Return the variable to allow assignment
+  object <- get(obj_name)
+  return(object)
+}
+
+#' Load RDS, RData, or CSV files
+#'
+#' \code{versaread()} is mainly for loading saved lists of gene names.
+#' For .RData files containing one object or an .RDS file, \code{versaread()} loads and returns
+#' the object for you to assign. For CSV files, it expects something containing 1 column
+#' and with a header, and will ignore everything after the first column.
+#' @param type The type of file being loaded (Options: rds, rdata, or csv)
+#' @param file The path of the desired file
+#'
+#' @return a character vector or an R object (if it's an RData or RDS file)
+#' @export
+#'
+#' @examples
+#' saveRDS(iris, "~/iris.rds")
+#' iris_reload <- versaread("~/iris.rds", type = "rds")
+#' write.csv(iris$Species, "iris.csv")
+#' iris_species <- versaread("iris.csv", type = "csv")
+versaread <- function(file, type) {
+  # Read .rds, .rdata, or .csv files
+  # It is only expecting a marker list for .csv files though
+  ## Check argument type
+  if (!type %in% c("rds", "rdata", "csv")) {
+    stop("type should be either 'csv', 'rds', or 'rdata'.")
+  }
+  if (type == "rds") {
+    object <- readRDS(file)
+  } else if (type == "rdata") {
+    object <- load_rdata(file = file)
+  } else {
+    object <- read.csv(file = file, header = TRUE, stringsAsFactors = FALSE)
+    object <- object[ , 1]
+  }
+  return(object)
+}

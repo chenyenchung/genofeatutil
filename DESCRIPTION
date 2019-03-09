@@ -1,0 +1,21 @@
+Package: genofeatutil
+Type: Package
+Title: Utilities for genomic feature manipulation
+Version: 0.1.0
+Author: Yen-Chung Chen
+Maintainer: Yen-Chung Chen <ycc520@nyu.edu>
+Description: Converting drosophila gene names for feature selection in NGS
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat
+Imports: 
+    Seurat,
+    dplyr,
+    feather,
+    rtracklayer,
+    data.table,
+    RCurl,
+    R.utils
+RoxygenNote: 6.1.1
