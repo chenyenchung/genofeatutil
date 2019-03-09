@@ -2,23 +2,25 @@
 % Please edit documentation in R/file_process.R
 \name{versaread}
 \alias{versaread}
-\title{Load RDS, RData, or CSV files}
+\title{Load RDS, RData, or CSV Files}
 \usage{
 versaread(file, type)
 }
 \arguments{
-\item{file}{The path of the desired file}
+\item{file}{a character string indicating the path of the desired file}
 
-\item{type}{The type of file being loaded (Options: rds, rdata, or csv)}
+\item{type}{a character string indicating the type of file being loaded
+(Options: \code{rds}, \code{rdata}, or \code{csv})}
 }
 \value{
 a character vector or an R object (if it's an RData or RDS file)
 }
 \description{
 \code{versaread()} is mainly for loading saved lists of gene names.
-For .RData files containing one object or an .RDS file, \code{versaread()} loads and returns
-the object for you to assign. For CSV files, it expects something containing 1 column
-and with a header, and will ignore everything after the first column.
+For .RData files containing one object or an .RDS file, \code{versaread()}
+loads and returns the object for you to assign. For CSV files, it expects
+something containing 1 column and with a header, and will ignore everything
+after the first column.
 }
 \examples{
 saveRDS(iris, "~/iris.rds")

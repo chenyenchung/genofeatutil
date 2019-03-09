@@ -8,7 +8,8 @@ get_10Xgenemapping <- function(object, assay = "RNA", gtfpath) {
   # Load .gtf file used for cellranger count
   gene_mapping <- rtracklayer::import(gtfpath)
   gene_mapping <- as.data.frame(gene_mapping)
-  gene_mapping <- dplyr::filter(gene_mapping, type == "gene", gene_name %in% genes)
+  gene_mapping <- dplyr::filter(gene_mapping, type == "gene",
+                                gene_name %in% genes)
   gene_mapping <- dplyr::select(gene_mapping, gene_id, gene_name)
   gene_mapping$gene_id <- update_fbid(gene_mapping$gene_id)
   result <- gene_mapping$gene_name
@@ -38,8 +39,9 @@ update_fbid <- function (id) {
 
 generate_fbid_version_table <- function(path) {
   ## Read the FBgn annotation table from FlyBase
-  id_table <- data.table::fread(input = path,
-                                header = TRUE, sep = "\t", stringsAsFactors = FALSE, data.table = TRUE)
+  id_table <- data.table::fread(input = path, header = TRUE,
+                                sep = "\t", stringsAsFactors = FALSE,
+                                data.table = TRUE)
   print(contable_ver)
   query <- id_table$`secondary_FBgn#(s)`
   names(query) <- id_table$`primary_FBgn#`

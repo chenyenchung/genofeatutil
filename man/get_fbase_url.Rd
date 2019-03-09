@@ -2,20 +2,23 @@
 % Please edit documentation in R/fetch_flybase.R
 \name{get_fbase_url}
 \alias{get_fbase_url}
-\title{Retrieving Download URLs for FlyBase ID conversion table and Symbol Synonym Table}
+\title{Retrieving URLs for FlyBase ID and Symbol Synonym Conversion Table}
 \usage{
-get_fbase_url(version = NULL)
+get_fbase_url(version = NULL, dirstr = NULL)
 }
 \arguments{
-\item{version}{A character specifying the version desired (e.g., "FB2019_01".)}
+\item{version}{a character specifying the version desired
+(e.g., "FB2019_01".)}
+
+\item{dirstr}{a list returned by \code{get_fbase_url()}}
 }
 \value{
-A named list with 2 items ("fbid" and "syno")
+a named list with 3 items ("fbid", "syno", and "dirstr")
 }
 \description{
-\code{get_fbase_url()} calls RCurl to check FlyBase FTP release repository to
-check available version. If not otherwise specified, it will generate dowdload
-URLs for table for FlyBase ID and Synonym.
+\code{get_fbase_url()} calls RCurl to check FlyBase FTP release repository
+to check available version. If not otherwise specified, it will generate
+dowdload URLs for table for FlyBase ID and Synonym.
 }
 \examples{
 # This retrieves the URLs for the up-to-date version

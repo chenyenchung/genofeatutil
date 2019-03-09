@@ -7,17 +7,18 @@
 
 
 
-#' Loading .RData files allowing assignment to an variable
+#' Loading .RData Files Allowing Assignment To An Variable
 #'
-#' \code{\link{save}()} allows saving multiple R objects from the environment for later use.
-#' One caveat of its default behavior is that when the .RData file is loaded,
-#' it retains its variable name, which could collide with something else that is
-#' already in the environment. \code{load_rdata()} loads .RData to the function environment,
-#' makes sure their is only one object loaded, and return it to allow assignment to
-#' another variable name upon loading.
-#' @param file The path of the desired Rdata file
+#' \code{\link{save}()} allows saving multiple R objects from the environment
+#' for later use. One caveat of its default behavior is that when the .RData
+#' file is loaded, it retains its variable name, which could collide with
+#' something else that is already in the environment. \code{load_rdata()} loads
+#' .RData to the function environment, makes sure their is only one object
+#' loaded, and return it to allow assignment to another variable name upon
+#' loading.
+#' @param file a character string specifying the path of the desired Rdata file
 #'
-#' @return An R object
+#' @return an R object
 #' @export
 #'
 #' @examples
@@ -33,21 +34,24 @@ load_rdata <- function(file) {
   obj_name <- setdiff(ls(), current_envir)
   ## Remind the user if more than one variable is in the file.
   if (length(obj_name) > 1) {
-    stop("This .rdata file contains more than 1 object and is likely to be an environment. Please load it with load().")
+    stop(strwrap("This .rdata file contains more than 1 object and is likely to
+                 be an environment. Please load it with load()."))
   }
   ## Return the variable to allow assignment
   object <- get(obj_name)
   return(object)
 }
 
-#' Load RDS, RData, or CSV files
+#' Load RDS, RData, or CSV Files
 #'
 #' \code{versaread()} is mainly for loading saved lists of gene names.
-#' For .RData files containing one object or an .RDS file, \code{versaread()} loads and returns
-#' the object for you to assign. For CSV files, it expects something containing 1 column
-#' and with a header, and will ignore everything after the first column.
-#' @param type The type of file being loaded (Options: rds, rdata, or csv)
-#' @param file The path of the desired file
+#' For .RData files containing one object or an .RDS file, \code{versaread()}
+#' loads and returns the object for you to assign. For CSV files, it expects
+#' something containing 1 column and with a header, and will ignore everything
+#' after the first column.
+#' @param type a character string indicating the type of file being loaded
+#' (Options: \code{rds}, \code{rdata}, or \code{csv})
+#' @param file a character string indicating the path of the desired file
 #'
 #' @return a character vector or an R object (if it's an RData or RDS file)
 #' @export
@@ -69,7 +73,8 @@ versaread <- function(file, type) {
   } else if (type == "rdata") {
     object <- load_rdata(file = file)
   } else {
-    object <- utils::read.csv(file = file, header = TRUE, stringsAsFactors = FALSE)
+    object <- utils::read.csv(file = file, header = TRUE,
+                              stringsAsFactors = FALSE)
     object <- object[ , 1]
   }
   return(object)

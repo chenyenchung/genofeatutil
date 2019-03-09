@@ -2,23 +2,24 @@
 % Please edit documentation in R/file_process.R
 \name{load_rdata}
 \alias{load_rdata}
-\title{Loading .RData files allowing assignment to an variable}
+\title{Loading .RData Files Allowing Assignment To An Variable}
 \usage{
 load_rdata(file)
 }
 \arguments{
-\item{file}{The path of the desired Rdata file}
+\item{file}{a character string specifying the path of the desired Rdata file}
 }
 \value{
-An R object
+an R object
 }
 \description{
-\code{\link{save}()} allows saving multiple R objects from the environment for later use.
-One caveat of its default behavior is that when the .RData file is loaded,
-it retains its variable name, which could collide with something else that is
-already in the environment. \code{load_rdata()} loads .RData to the function environment,
-makes sure their is only one object loaded, and return it to allow assignment to
-another variable name upon loading.
+\code{\link{save}()} allows saving multiple R objects from the environment
+for later use. One caveat of its default behavior is that when the .RData
+file is loaded, it retains its variable name, which could collide with
+something else that is already in the environment. \code{load_rdata()} loads
+.RData to the function environment, makes sure their is only one object
+loaded, and return it to allow assignment to another variable name upon
+loading.
 }
 \examples{
 save(iris, "~/iris.RData")

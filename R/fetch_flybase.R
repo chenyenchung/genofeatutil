@@ -1,13 +1,14 @@
-#' Retrieving Download URLs for FlyBase ID conversion table and Symbol Synonym Table
+#' Retrieving URLs for FlyBase ID and Symbol Synonym Conversion Table
 #'
-#' \code{get_fbase_url()} calls RCurl to check FlyBase FTP release repository to
-#' check available version. If not otherwise specified, it will generate dowdload
-#' URLs for table for FlyBase ID and Synonym.
+#' \code{get_fbase_url()} calls RCurl to check FlyBase FTP release repository
+#' to check available version. If not otherwise specified, it will generate
+#' dowdload URLs for table for FlyBase ID and Synonym.
 #'
-#' @param version A character specifying the version desired (e.g., "FB2019_01".)
-#' @param dirstr A list returned by \code{get_fbase_url()}
+#' @param version a character specifying the version desired
+#' (e.g., "FB2019_01".)
+#' @param dirstr a list returned by \code{get_fbase_url()}
 #'
-#' @return A named list with 3 items ("fbid", "syno", and "dirstr")
+#' @return a named list with 3 items ("fbid", "syno", and "dirstr")
 #'
 #' @examples
 #' # This retrieves the URLs for the up-to-date version
@@ -21,7 +22,8 @@ get_fbase_url <- function(version = NULL, dirstr = NULL) {
   } else {
     # Find current FBid mapping and synonyms from FlyBase release
     filelist <- RCurl::getURL("ftp://ftp.flybase.net/releases/")
-    filelist <- data.table::fread(text = filelist, fill = TRUE, data.table = FALSE)
+    filelist <- data.table::fread(text = filelist, fill = TRUE,
+                                  data.table = FALSE)
   }
 
   # Default version is the newest version
@@ -32,7 +34,8 @@ get_fbase_url <- function(version = NULL, dirstr = NULL) {
 
   # Check if the version number is legal
   if (!grepl("^FB[0-9]{4}_[0-9]{2}", version)) {
-    stop("The format for version number seems to be wrong. It is FB[year]_[month] (e.g., 'FB2019_01').")
+    stop(strwrap("The format for version number seems to be wrong.
+                 It is FB[year]_[month] (e.g., 'FB2019_01')."))
   }
 
   # Extract available version on the server
@@ -40,14 +43,16 @@ get_fbase_url <- function(version = NULL, dirstr = NULL) {
   ver_list <- ver_list[!ver_list %in% c("README", "current")]
 
   if (!version %in% ver_list) {
-    msg <- paste0("The version is not available on FlyBase. Please try the follows: ",
+    msg <- paste0("The version is not available on FlyBase. ",
+                  "Please try the follows: ",
                   paste(ver_list, collapse = ", "), ".")
-    stop("The version is not available on FlyBase.")
+    stop(msg)
   }
 
   # Make URL for the specified version
   rldate <- gsub("^FB", "", version)
-  ftpurl_prefix <- paste0("ftp://ftp.flybase.net/releases/", version, "/precomputed_files/")
+  ftpurl_prefix <- paste0("ftp://ftp.flybase.net/releases/",
+                          version, "/precomputed_files/")
   fbid_postfix <- paste0("genes/fbgn_annotation_ID_fb_", rldate,".tsv.gz")
   syno_postfix <- paste0("synonyms/fb_synonym_fb_", rldate, ".tsv.gz")
   fbid_url <- paste0(ftpurl_prefix, fbid_postfix)
@@ -58,19 +63,20 @@ get_fbase_url <- function(version = NULL, dirstr = NULL) {
 }
 
 
-#' Downloading FlyBase ID conversion table and Symbol Synonym Table
+#' Downloading FlyBase ID Conversion Table and Symbol Synonym Table
 #'
 #' \code{fetch_flybase()} downloads conversion tables for different version of
 #' Flybase IDs and symbol synonyms from Flybase. If not otherwise specified,
-#' current version of the tables will be downloaded, and returned as a list with
-#' 2 items.
+#' current version of the tables will be downloaded, and returned as a list
+#' with 2 items.
 #'
-#' @param version A character specifying the version desired (e.g., "FB2019_01".)
-#' @param urls (Optional) A character vector specifying specific URLs to download and read.
-#' The length should be 2: the first URL for FBid conversion table, and the second for
-#' synonym conversion.
+#' @param version a character string specifying the version desired
+#' (e.g., "FB2019_01".)
+#' @param urls (Optional) a character vector specifying specific URLs to
+#' download and read. The length should be 2: the first URL for FBid conversion
+#' table, and the second for synonym conversion.
 #'
-#' @return A list of 2 data frames
+#' @return a list of 2 data frames
 #' @export
 #'
 #' @examples
@@ -101,8 +107,9 @@ fetch_flybase <- function (urls = NULL, version = NULL) {
     read_path <- temp_dlfile
     if (gzipped) {read_path <- R.utils::gunzip(temp_dlfile)}
 
-    fbtable_list[[nameattr]] <- data.table::fread(input = read_path, quote = "",
-                                                  sep = "\t", data.table = FALSE)
+    fbtable_list[[nameattr]] <- data.table::fread(
+      input = read_path, quote = "", sep = "\t", data.table = FALSE
+    )
   }
   return(fbtable_list)
 }

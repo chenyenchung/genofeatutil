@@ -2,25 +2,26 @@
 % Please edit documentation in R/fetch_flybase.R
 \name{fetch_flybase}
 \alias{fetch_flybase}
-\title{Downloading FlyBase ID conversion table and Symbol Synonym Table}
+\title{Downloading FlyBase ID Conversion Table and Symbol Synonym Table}
 \usage{
 fetch_flybase(urls = NULL, version = NULL)
 }
 \arguments{
-\item{urls}{(Optional) A character vector specifying specific URLs to download and read.
-The length should be 2: the first URL for FBid conversion table, and the second for
-synonym conversion.}
+\item{urls}{(Optional) a character vector specifying specific URLs to
+download and read. The length should be 2: the first URL for FBid conversion
+table, and the second for synonym conversion.}
 
-\item{version}{A character specifying the version desired (e.g., "FB2019_01".)}
+\item{version}{a character string specifying the version desired
+(e.g., "FB2019_01".)}
 }
 \value{
-A list of 2 data frames
+a list of 2 data frames
 }
 \description{
 \code{fetch_flybase()} downloads conversion tables for different version of
 Flybase IDs and symbol synonyms from Flybase. If not otherwise specified,
-current version of the tables will be downloaded, and returned as a list with
-2 items.
+current version of the tables will be downloaded, and returned as a list
+with 2 items.
 }
 \examples{
 # This retrieves the URLs for the up-to-date version
