@@ -1,6 +1,6 @@
 context("test-fetch_flybase")
 
-test_that("URL retrieval OK", {
+test_that("URL retrieval", {
   # To make sure the URLs retrieved are correct
   urls <- get_fbase_url()
   fbidsep <- strsplit(urls[["fbid"]], "\\/")[[1]]
@@ -16,15 +16,22 @@ test_that("URL retrieval OK", {
   # Check if the URLs are for FTP
   expect_equivalent(fbidsep[1], "ftp:")
   expect_equivalent(synosep[1], "ftp:")
+
+  # Check if wrong version numbers will be captured
+  expect_error(get_fbase_url("FB1000_AA", dirstr = urls))
+  expect_error(get_fbase_url("FB1800_13", dirstr = urls))
 })
 
-test_that("Successfully captured wrong version number", {
-  expect_error(get_fbase_url("FB1000_AA"))
-  expect_error(get_fbase_url("FB1800_13"))
-})
-
-test_that("The table structure is correct", {
-  test_table <- fetch_flybase()
+test_that("Custom URL and the retrieved table structure", {
+  # Provide URLs directly to prevent multiple access to FlyBase FTP site
+  # This test script will call get_fbase_url() for 4 times if we don't
+  # specify URL for fetch_flybase() here.
+  # As a result, FlyBase FTP declines the connection and our test will fail.
+  fburl <- "ftp://ftp.flybase.net/releases/FB2019_01/precomputed_files/"
+  test_table <- fetch_flybase(
+    urls = c(paste0(fburl, "genes/fbgn_annotation_ID_fb_2019_01.tsv.gz"),
+             paste0(fburl, "synonyms/fb_synonym_fb_2019_01.tsv.gz"))
+  )
   fbid_header <- c("##gene_symbol", "organism_abbreviation", "primary_FBgn#",
                    "secondary_FBgn#(s)", "annotation_ID", "secondary_annotation_ID(s)")
   syno_header <- c("##primary_FBid", "organism_abbreviation", "current_symbol",

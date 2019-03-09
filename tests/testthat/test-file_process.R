@@ -47,5 +47,5 @@ test_that("Versaread calls read.csv()", {
                          "b" = c("A", "B", "C", "D", "E"))
   write.table(dummy_df$b, file = tempobj, sep = ",", row.names = FALSE)
   expect_equivalent(versaread(tempobj, type = "csv"),
-                    read.csv(tempobj, header = TRUE, stringsAsFactors = FALSE)[ , 1])
+                    utils::read.csv(tempobj, header = TRUE, stringsAsFactors = FALSE)[ , 1])
 })

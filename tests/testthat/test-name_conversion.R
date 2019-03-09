@@ -1,5 +1,4 @@
 context("test-name_conversion")
-library(dplyr)
 
 # Raw data that ought to be used in multiple tests
 fbpath <- "data/fb_synonym_fb_2019_01.tsv"

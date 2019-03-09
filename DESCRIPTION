@@ -2,9 +2,11 @@ Package: genofeatutil
 Type: Package
 Title: Utilities for genomic feature manipulation
 Version: 0.1.0
-Author: Yen-Chung Chen
-Maintainer: Yen-Chung Chen <ycc520@nyu.edu>
-Description: Converting drosophila gene names for feature selection in NGS
+Author@R: person("Yen-Chung", "Chen", email = "ycc520@nyu.edu")
+Maintainer@R: person("Yen-Chung", "Chen", email = "ycc520@nyu.edu")
+Description:
+  To streamline analysis for NGS data, genofeatutil converts drosophila gene names and 
+  FlyBase id numbers to a consistent version. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -17,5 +19,8 @@ Imports:
     rtracklayer,
     data.table,
     RCurl,
-    R.utils
+    R.utils,
+    methods,
+    stats,
+    utils
 RoxygenNote: 6.1.1

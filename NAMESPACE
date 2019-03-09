@@ -2,4 +2,5 @@
 
 export(fetch_flybase)
 export(load_rdata)
+export(make_mtry_series)
 export(versaread)

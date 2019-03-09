@@ -69,7 +69,7 @@ versaread <- function(file, type) {
   } else if (type == "rdata") {
     object <- load_rdata(file = file)
   } else {
-    object <- read.csv(file = file, header = TRUE, stringsAsFactors = FALSE)
+    object <- utils::read.csv(file = file, header = TRUE, stringsAsFactors = FALSE)
     object <- object[ , 1]
   }
   return(object)
