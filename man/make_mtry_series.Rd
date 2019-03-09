@@ -2,17 +2,17 @@
 % Please edit documentation in R/Utilities.R
 \name{make_mtry_series}
 \alias{make_mtry_series}
-\title{Generate a tuning series of \code{mtry} for \code{randomForest()}}
+\title{Generate a Tuning Series of \code{mtry} for \code{randomForest()}}
 \usage{
 make_mtry_series(x, y)
 }
 \arguments{
-\item{x}{Predictor matrix}
+\item{x}{a predictor matrix}
 
-\item{y}{Response matrix}
+\item{y}{a response matrix}
 }
 \value{
-A numeric factor
+a numeric factor
 }
 \description{
 \code{\link{randomForest}()} implements a default value for mtry determined

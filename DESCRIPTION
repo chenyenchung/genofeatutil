@@ -13,7 +13,7 @@ LazyData: true
 Suggests: 
     testthat
 Imports: 
-    Seurat,
+    Seurat (>= 3.0.0),
     dplyr,
     feather,
     rtracklayer,
