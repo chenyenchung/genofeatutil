@@ -70,7 +70,6 @@ get_fbase_url <- function(version = NULL, dirstr = NULL) {
 #' table, and the second for synonym conversion.
 #'
 #' @return a list of 2 data frames
-#' @export
 #'
 #' @examples
 #' # This retrieves the URLs for the up-to-date version
