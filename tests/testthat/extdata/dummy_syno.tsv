@@ -1,0 +1,56 @@
+
+## FlyBase Symbol-Synonym Correspondence Table
+## Generated: Tue Feb 12 09:58:03 2019
+## Using datasource: dbi:Pg:dbname=fb_2019_01_reporting;host=flysql20;port=5432...
+
+##primary_FBid	organism_abbreviation	current_symbol	current_fullname	fullname_synonym(s)	symbol_synonym(s)
+FBgn0262029	Dmel	d	dachs	Dachs,lethal (2) c00146,myosin 29D,unconventional myosin 29D	29C3-D1,29CD,AAF52683,CG10595,CG13087,CG31610,CG42840,D,Dachs,Dh,DmMyo20,Ds,Myo29D,Myo3A,anon-EST:Liang-1.78,clone 1.78,dachs,l(2)c00146
+FBgn0263393	Mmus	Mmus\Itpr1	inositol 1,4,5-trisphosphate receptor 1	Mus musculus inositol 1,4,5-trisphosphate receptor 1	Itpr1
+FBgn0052532	Dmel	CG32532			CG14201,CG14202,CG14203
+FBgn0023536	Dmel	CG3156			EG:171D11.2
+FBgn0029718	Dmel	mRpL30	mitochondrial ribosomal protein L30	Mitochondrial ribosomal protein L30	CG7038,L30,mRPL30
+FBgn0031101	Dmel	CG1631			
+FBgn0030952	Dmel	CG12609			
+FBgn0265767	Dmel	zyd	zydeco		BEST:CK02262,CG2893,CG40147,CK02262,Nckx-x,Ncxk-x,zydeco
+FBgn0030514	Dmel	CG9941			A,x93
+FBgn0003950	Dmel	unc	uncoordinated	Uncoordinated,section 3,section 4,section 5	3,4,5,CG1501,UNC,Unc,W5,l(1)19Ef,l(1)6-3-212,lLV7
+FBgn0260799	Dmel	p120ctn	Adherens junction protein p120	Adherens-junction-protein-p120,P120-Catenin,p120 catenin,p120-catenin,p120catenin	CG17484,Dp120[ctn],Dp120ctn,P120,P120-catenin,P120ctn,dP120ctn,dp120ctn,p120,p120[ctn]
+FBgn0031089	Dmel	CG9572			CT17356
+FBgn0265630	Dmel	sno	strawberry notch	Strawberry Notch,Strawberry notch,glossy-like	CG1903,CG44436,Sno,g-l,l(1)11Ea
+FBgn0250776	Dsim	Dsim\GD26014			Dsim\GD22595,Dsim\GD22596,GD22595,GD22596,GD26014,dsim_GLEANR_6341,dsim_GLEANR_6342
+FBgn0266000	Dmel	CG44774			CG4068,CR43698,CR43699
+FBgn0040670	Dmel	e(y)2b	enhancer of yellow 2b	CG14612	CG14612
+FBgn0053919	Dmel	CG33919			
+FBgn0026378	Dmel	Rep	Rab escort protein	Rab escort protein homolog,rab escort protein	CG8432,REP
+FBgn0117479	Dere	Dere\GG25358			GG25358,dere_GLEANR_9999
+FBgn0028475	Dmel	Hrd3	HMG-coA reductase degradation 3		BcDNA:LD23587,CG10221,HRD3,Hrd3
+FBgn0264330	Dmel	CG43789			
+FBgn0265998	Dmel	Doa	Darkener of apricot	CG33204,CG42320,Mosaic suppressor,darkener of apricot,lethal (3) S084402,lethal (3) s2784	0844/02,CG1658,CG31049,CG33204,CG33553,CG42320,DOA,DOA/CLK2,Msu,doa,l(3)01705,l(3)S084402,l(3)s2784
+FBgn0265272	Dmel	CG30060		anon-SAGE:Wang-129	anon-SAGE:Wang-129
+FBgn0079615	Dpse	Dpse\GA19619		GA19619	GA19619,dpse_GLEANR_9998
+FBgn0033185	Dmel	CG1603			
+FBgn0260438	Dmel	rad201	radiation-resistant 201	radiation-resistant	rad(2)201,rad(2)201[G1],rad(2)201[[G1]]
+FBgn0000337	Dmel	cn	cinnabar	kynurenine 3-monooxygenase	CG1555,Dmel\cn,KMO
+FBgn0034008	Dmel	CG8152			
+FBgn0265362	Dmel	CG44303			CG3184
+FBgn0117476	Dere	Dere\GG25355			GG25355,dere_GLEANR_9996
+FBgn0035868	Dmel	CG7194			BEST:CK00048,BEST:CK01174,CK01174,ck00048
+FBgn0117477	Dere	Dere\GG25356			GG25356,dere_GLEANR_9997
+FBgn0261536	Dmel	CG42660			
+FBgn0030158	Dmel	CG9686			BcDNA:RH74092,CT6802,anon-EST:Posey3
+FBgn0261537	Dmel	CG42661			
+FBgn0261028	Dpse	Dpse\GA30012			GA30012
+FBgn0264296	Dmel	CG43774			CG10039
+FBgn0117474	Dere	Dere\GG25353			GG25353,dere_GLEANR_9994
+FBgn0264298	Dmel	CG43776			CG13569,CG13569-2
+FBgn0034774	Dmel	CG13526			BcDNA:AT13807,CBP8
+FBgn0263747	Dmel	CG43672			CG33173,CG8473
+FBgn0117473	Dere	Dere\GG25352			GG25352,dere_GLEANR_9993
+FBgn0039584	Dmel	beat-VI	beaten path VI	beat-VI	Beat-VI,CG12089,CG14064,beat,beat VI
+FBgn0250701	Dpse	Dpse\GA29343			GA29343,dpse_GLEANR_9999
+FBgn0053993	Dmel	CG33993			CG13289,CG13290
+FBgn0033569	Dmel	CG12942			
+FBgn0255947	Dsim	Dsim\mir-124			Dsim\GD_RFAM_MIR_48001611,GD26096,GD_RFAM_MIR_48001611,dsi-mir-124,mir-124
+FBgn0264301	Dmel	CG43779			CG15639
+FBgn0032030	Dmel	Wdr82	WD repeat domain 82		CG17293,WDR82,dWdr82,wdr-82,wdr82
+FBgn0264302	Dmel	CG43780			CG8600

@@ -4,12 +4,17 @@
 \alias{fetch_flybase}
 \title{Downloading FlyBase ID Conversion Table and Symbol Synonym Table}
 \usage{
-fetch_flybase(urls = NULL, version = NULL)
+fetch_flybase(urls = NULL, paths = NULL, version = NULL)
 }
 \arguments{
 \item{urls}{(Optional) a character vector specifying specific URLs to
 download and read. The length should be 2: the first URL for FBid conversion
 table, and the second for synonym conversion.}
+
+\item{paths}{a character vector specifying local files to read. The length
+should be 2: the first for FBid conversion table, and the second for synonym
+conversion. This should only be used in test to make sure the convesion
+coheres with the current official version.}
 
 \item{version}{a character string specifying the version desired
 (e.g., "FB2019_01".)}

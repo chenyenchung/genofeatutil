@@ -3,6 +3,6 @@
 export(calculate_gene_cor)
 export(get_gene_names)
 export(load_rdata)
+export(make_database)
 export(make_mtry_series)
-export(prepare_database)
 export(versaread)

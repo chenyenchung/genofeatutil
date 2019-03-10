@@ -17,15 +17,10 @@ denormalize_genename <- function(gene) {
 #' \code{make_database()} loads gene name / ID conversion tables from online
 #' databases (e.g., FlyBase) and a user-provided GTF file that is used to
 #' annotate the features of the NGS dataset of interest (e.g., the GTF file
-#' STAR or \code{cellranger count} uses).
+#' STAR or \code{cellranger count} uses), and makes conversion tables from the
+#' loaded data.
 #'
-#' @param species a character string describing the species of the genes.
-#' (Options: "\code{dmel}")
-#' @param gtf.path a character string containing the path to the GTF file
-#' containing the input gene names (e.g., the GTF files used by
-#' \code{cellranger count})
-#' @param version
-#'
+#' @inheritParams prepare_database
 #' @return a list containing multiple coversion tables and meta data
 #' @export
 #'
@@ -47,6 +42,23 @@ make_database <- function(species = "dmel", gtf.path, version = NULL) {
 }
 
 
+#' Prepare an Unprocessed Database for Gene Name Conversion
+#'
+#' \code{prepare_database()} loads gene name / ID conversion tables from online
+#' databases (e.g., FlyBase) and a user-provided GTF file that is used to
+#' annotate the features of the NGS dataset of interest (e.g., the GTF file
+#' STAR or \code{cellranger count} uses) into memory for later processing by
+#' \code{\link{make_database}()}.
+#'
+#' @param species a character string describing the species of the genes.
+#' (Options: "\code{dmel}")
+#' @param gtf.path a character string containing the path to the GTF file
+#' containing the input gene names (e.g., the GTF files used by
+#' \code{cellranger count})
+#' @param version a character specifying the version desired
+#' (e.g., "FB2019_01".)
+#'
+#' @return a list containing data frames and character strings of meta data
 prepare_database <- function(species = "dmel", gtf.path, version = NULL) {
   if (!species %in% c("dmel", "test")) {
     stop("prepare_database does not support ", species, " now.")
@@ -60,6 +72,13 @@ prepare_database <- function(species = "dmel", gtf.path, version = NULL) {
   if (species == "dmel") {
     result <- fetch_flybase(version = version)
   }
+
+  # Load data from local if in test environment
+  if (species == "test") {
+    result <- fetch_flybase(paths = c("extdata/dummy_fbgn.tsv",
+                                      "extdata/dummy_syno.tsv"))
+  }
+
   # Keep gene id and gene name from the GTF file
   gtf <- id_mapping[ , c("gene_id", "gene_name")]
   result[["gtf"]] <- gtf
@@ -138,8 +157,6 @@ generate_flybase_sym <- function (db) {
 #'
 #' @return a named character vector, in which the values are gene names and
 #' the names are gene ids
-#'
-#' @examples
 generate_gene_mapping <- function(x, db, ...) {
   # Check if db is legit
   if (!"gtf" %in% names(db)) {

@@ -10,7 +10,7 @@ test_that("Things that require the database prepared", {
   expect_error(prepare_database(species = "cele",
                                 gtf.path = "extdata/dummy.gtf"),
                regexp = "prepare_database does not support")
-  testdb <- prepare_database(species = "dmel",
+  testdb <- prepare_database(species = "test",
                              gtf.path = "extdata/dummy.gtf")
   # Output structure check
   expect_equal(sort(names(testdb)), c("fbid", "gtf", "species", "syno"))
@@ -36,7 +36,7 @@ test_that("Things that require the database prepared", {
   expect_warning(generate_gene_mapping(c(genes, "not_here"), db = testdb),
                  regexp = "Some gene names are not found in the GTF file")
   test_mapping <- generate_gene_mapping(genes, db = testdb)
-  expect_equal(test_mapping, genes)
+  expect_equivalent(test_mapping, genes)
   expect_equal(names(test_mapping), ids)
 
 })

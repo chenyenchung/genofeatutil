@@ -25,19 +25,19 @@ test_that("URL retrieval", {
 
 # fetch_flybase() ---------------------------------------------------------
 test_that("Custom URL and the retrieved table structure", {
-  # Provide URLs directly to prevent multiple access to FlyBase FTP site
-  # This test script will call get_fbase_url() for 4 times if we don't
-  # specify URL for fetch_flybase() here.
-  # As a result, FlyBase FTP declines the connection and our test will fail.
-  fburl <- "ftp://ftp.flybase.net/releases/FB2019_01/precomputed_files/"
+  # To prevent multiple attempts to connect FlyBae FTP, the test is fetching
+  # local dummy files
   test_table <- fetch_flybase(
-    urls = c(paste0(fburl, "genes/fbgn_annotation_ID_fb_2019_01.tsv.gz"),
-             paste0(fburl, "synonyms/fb_synonym_fb_2019_01.tsv.gz"))
+    paths = c("extdata/dummy_fbgn.tsv",
+              "extdata/dummy_syno.tsv")
   )
-  fbid_header <- c("##gene_symbol", "organism_abbreviation", "primary_FBgn#",
-                   "secondary_FBgn#(s)", "annotation_ID", "secondary_annotation_ID(s)")
-  syno_header <- c("##primary_FBid", "organism_abbreviation", "current_symbol",
-                   "current_fullname", "fullname_synonym(s)", "symbol_synonym(s)")
+  fbid_header <- c("##gene_symbol", "organism_abbreviation",
+                   "primary_FBgn#", "secondary_FBgn#(s)",
+                   "annotation_ID", "secondary_annotation_ID(s)")
+  syno_header <- c("##primary_FBid", "organism_abbreviation",
+                   "current_symbol", "current_fullname",
+                   "fullname_synonym(s)", "symbol_synonym(s)")
+
   expect_equal(colnames(test_table[["fbid"]]), fbid_header)
   expect_equal(colnames(test_table[["syno"]]), syno_header)
 })
