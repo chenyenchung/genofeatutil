@@ -13,7 +13,7 @@ get_fbase_url(version = NULL, dirstr = NULL)
 \item{dirstr}{a list returned by \code{get_fbase_url()}}
 }
 \value{
-a named list with 3 items ("fbid", "syno", and "dirstr")
+a named list with 4 items ("fbid", "syno", "dirstr", and "version")
 }
 \description{
 \code{get_fbase_url()} calls RCurl to check FlyBase FTP release repository

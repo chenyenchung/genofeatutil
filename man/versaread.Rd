@@ -23,8 +23,10 @@ something containing 1 column and with a header, and will ignore everything
 after the first column.
 }
 \examples{
-saveRDS(iris, "~/iris.rds")
-iris_reload <- versaread("~/iris.rds", type = "rds")
-write.csv(iris$Species, "iris.csv")
-iris_species <- versaread("iris.csv", type = "csv")
+temprds <- tempfile(fileext = ".rds")
+saveRDS(iris, file = temprds)
+iris_reload <- versaread(temprds, type = "rds")
+tempcsv<- tempfile(fileext = ".csv")
+write.csv(iris$Species, file = tempcsv)
+iris_species <- versaread(tempcsv, type = "csv")
 }

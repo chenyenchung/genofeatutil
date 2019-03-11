@@ -20,7 +20,7 @@ list from \code{\link{make_database}()}, and convert the vector according
 to the list.
 }
 \examples{
-dummypath <- system.file("tests/testthat/extdata/dummy.gtf",
+dummypath <- system.file("extdata", "dummy.gtf",
 package = "genofeatutil")
 dmeldb <- make_database(species = "dmel",
                            gtf.path = dummypath)

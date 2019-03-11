@@ -22,8 +22,9 @@
 #' @export
 #'
 #' @examples
-#' save(iris, "~/iris.RData")
-#' iris_reload <- load_rdata(file = "~/iris.RData")
+#' temprdata <- tempfile(fileext = ".rData")
+#' save(iris, file = temprdata)
+#' iris_reload <- load_rdata(file = temprdata)
 load_rdata <- function(file) {
   # Allow assignment of .rdata files arbitrarily to a variable
   # in contrast to its original behavior to a fixed name when it was saved
@@ -57,10 +58,12 @@ load_rdata <- function(file) {
 #' @export
 #'
 #' @examples
-#' saveRDS(iris, "~/iris.rds")
-#' iris_reload <- versaread("~/iris.rds", type = "rds")
-#' write.csv(iris$Species, "iris.csv")
-#' iris_species <- versaread("iris.csv", type = "csv")
+#' temprds <- tempfile(fileext = ".rds")
+#' saveRDS(iris, file = temprds)
+#' iris_reload <- versaread(temprds, type = "rds")
+#' tempcsv<- tempfile(fileext = ".csv")
+#' write.csv(iris$Species, file = tempcsv)
+#' iris_species <- versaread(tempcsv, type = "csv")
 versaread <- function(file, type) {
   # Read .rds, .rdata, or .csv files
   # It is only expecting a marker list for .csv files though

@@ -28,9 +28,9 @@ test_that("Custom URL and the retrieved table structure", {
   # To prevent multiple attempts to connect FlyBae FTP, the test is fetching
   # local dummy files
   test_table <- fetch_flybase(
-    paths = c(system.file("tests/testthat/extdata/dummy_fbgn.tsv",
+    paths = c(system.file("extdata", "dummy_fbgn.tsv",
                           package = "genofeatutil"),
-              system.file("tests/testthat/extdata/dummy_syno.tsv",
+              system.file("extdata", "dummy_syno.tsv",
                           package = "genofeatutil")
               )
   )

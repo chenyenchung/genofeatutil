@@ -18,7 +18,7 @@ test_that("normalize and denormalize gene names", {
 
 test_that("Things that require the database prepared", {
   # prepare_database() --------------------------------------------------
-  dummypath <- system.file("tests/testthat/extdata/dummy.gtf",
+  dummypath <- system.file("extdata", "dummy.gtf",
                            package = "genofeatutil")
   # Unsupported species error
   expect_error(prepare_database(species = "cele",
@@ -42,7 +42,7 @@ test_that("Things that require the database prepared", {
 
 test_that("generate_gene_mapping", {
   # prepare_database() --------------------------------------------------
-  dummypath <- system.file("tests/testthat/extdata/dummy.gtf",
+  dummypath <- system.file("extdata", "dummy.gtf",
                            package = "genofeatutil")
   testdb <- prepare_database(species = "test",
                              gtf.path = dummypath)
@@ -65,7 +65,7 @@ test_that("generate_gene_mapping", {
 
 test_that("update_fbgn", {
   # prepare_database() --------------------------------------------------
-  dummypath <- system.file("tests/testthat/extdata/dummy.gtf",
+  dummypath <- system.file("extdata", "dummy.gtf",
                            package = "genofeatutil")
   testdb <- make_database(species = "test",
                           gtf.path = dummypath)

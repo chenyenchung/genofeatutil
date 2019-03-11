@@ -8,7 +8,7 @@
 #' (e.g., "FB2019_01".)
 #' @param dirstr a list returned by \code{get_fbase_url()}
 #'
-#' @return a named list with 3 items ("fbid", "syno", and "dirstr")
+#' @return a named list with 4 items ("fbid", "syno", "dirstr", and "version")
 get_fbase_url <- function(version = NULL, dirstr = NULL) {
   if (!is.null(dirstr)) {
     filelist <- dirstr[["dirstr"]]
@@ -50,8 +50,8 @@ get_fbase_url <- function(version = NULL, dirstr = NULL) {
   syno_postfix <- paste0("synonyms/fb_synonym_fb_", rldate, ".tsv.gz")
   fbid_url <- paste0(ftpurl_prefix, fbid_postfix)
   syno_url <- paste0(ftpurl_prefix, syno_postfix)
-  urls <- list(fbid_url, syno_url, filelist)
-  names(urls) <- c("fbid", "syno", "dirstr")
+  urls <- list(fbid_url, syno_url, filelist, version)
+  names(urls) <- c("fbid", "syno", "dirstr", "version")
   return(urls)
 }
 
@@ -74,13 +74,6 @@ get_fbase_url <- function(version = NULL, dirstr = NULL) {
 #' table, and the second for synonym conversion.
 #'
 #' @return a list of 2 data frames
-#'
-#' @examples
-#' # This retrieves the URLs for the up-to-date version
-#' fetch_flybase()
-#'
-#' # This gets the FB2019_01 version
-#' fetch_flybase(version = "FB2019_01")
 fetch_flybase <- function (urls = NULL, paths = NULL, version = NULL) {
   # Get urls for FB id and FB synonyms for conversion
   if (is.null(urls) & is.null(paths)) {urls <- get_fbase_url()}
@@ -109,7 +102,7 @@ fetch_flybase <- function (urls = NULL, paths = NULL, version = NULL) {
   for (nameattr in c("fbid", "syno")) {
 
     temp_dlfile <- tempfile(fileext = ".gz")
-    download.file(url = urls[[nameattr]], destfile = temp_dlfile)
+    utils::download.file(url = urls[[nameattr]], destfile = temp_dlfile)
 
     # The user might give URLs to non-Gzipped file, so it's necessary
     # to check and decide whether gunzip is required.

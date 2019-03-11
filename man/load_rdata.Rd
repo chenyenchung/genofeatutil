@@ -22,6 +22,7 @@ loaded, and return it to allow assignment to another variable name upon
 loading.
 }
 \examples{
-save(iris, "~/iris.RData")
-iris_reload <- load_rdata(file = "~/iris.RData")
+temprdata <- tempfile(fileext = ".rData")
+save(iris, file = temprdata)
+iris_reload <- load_rdata(file = temprdata)
 }

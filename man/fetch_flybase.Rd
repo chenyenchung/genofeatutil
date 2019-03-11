@@ -28,10 +28,3 @@ Flybase IDs and symbol synonyms from Flybase. If not otherwise specified,
 current version of the tables will be downloaded, and returned as a list
 with 2 items.
 }
-\examples{
-# This retrieves the URLs for the up-to-date version
-fetch_flybase()
-
-# This gets the FB2019_01 version
-fetch_flybase(version = "FB2019_01")
-}

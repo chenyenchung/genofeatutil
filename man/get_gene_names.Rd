@@ -8,9 +8,9 @@
 \usage{
 get_gene_names(x, ...)
 
-\method{get_gene_names}{default}(x, use.row = FALSE)
+\method{get_gene_names}{default}(x, use.row = FALSE, ...)
 
-\method{get_gene_names}{Seurat}(x, assay = "RNA")
+\method{get_gene_names}{Seurat}(x, assay = "RNA", ...)
 }
 \arguments{
 \item{x}{an object (matrix, data frame, or Seuratv3 object) to extract gene

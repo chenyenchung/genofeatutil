@@ -132,7 +132,8 @@ get_gene_names <- function(x, ...) {
 #' row names or not
 #'
 #' @rdname get_gene_names
-get_gene_names.default <- function(x, use.row = FALSE) {
+#' @export
+get_gene_names.default <- function(x, use.row = FALSE, ...) {
   # Type check
   if (!(is.data.frame(x) | is.matrix(x))) {
     stop("Sorry, the object is not supported by get_gene_names().")
@@ -146,7 +147,8 @@ get_gene_names.default <- function(x, use.row = FALSE) {
 #' @param assay a character string indicating an assay in the Seurat object
 #'
 #' @rdname get_gene_names
-get_gene_names.Seurat <- function(x, assay = "RNA") {
+#' @export
+get_gene_names.Seurat <- function(x, assay = "RNA", ...) {
   # Extract the names of all detected genes of an assay in a Seuratv3 object
   multiassayobj <- methods::slot(x, name = "assays")
   singleassayobj <- multiassayobj[[assay]]

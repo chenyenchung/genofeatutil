@@ -28,7 +28,7 @@ STAR or \code{cellranger count} uses), and makes conversion tables from the
 loaded data.
 }
 \examples{
-dummypath <- system.file("tests/testthat/extdata/dummy.gtf",
+dummypath <- system.file("extdata", "dummy.gtf",
 package = "genofeatutil")
 dmeldb <- make_database(species = "dmel",
                            gtf.path = dummypath)
