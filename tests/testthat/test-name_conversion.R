@@ -18,13 +18,14 @@ test_that("normalize and denormalize gene names", {
 
 test_that("Things that require the database prepared", {
   # prepare_database() --------------------------------------------------
-
+  dummypath <- system.file("tests/testthat/extdata/dummy.gtf",
+                           package = "genofeatutil")
   # Unsupported species error
   expect_error(prepare_database(species = "cele",
-                                gtf.path = "extdata/dummy.gtf"),
+                                gtf.path = dummypath),
                regexp = "prepare_database does not support")
   testdb <- prepare_database(species = "test",
-                             gtf.path = "extdata/dummy.gtf")
+                             gtf.path = dummypath)
   # Output structure check
   expect_equal(sort(names(testdb)), c("fbid", "gtf", "metadata", "syno"))
 
