@@ -59,10 +59,10 @@ make_database <- function(species = "dmel", gtf.path, version = NULL) {
                          gtf.path = gtf.path,
                          version = version)
 
-  # Generate conversion vectors from the synonym table
-  db <- generate_flybase_sym(db)
   # Generate conversion vectors for FBgn update
   db <- generate_fbid_version_table(db)
+  # Generate conversion vectors from the synonym table
+  db <- generate_flybase_sym(db)
   db <- generate_gene_mapping(db)
 
   return(db)
@@ -205,7 +205,7 @@ generate_fbid_version_table <- function(db) {
       names(result) <- old_id
       return(result)
     }
-  }, simplify = FALSE)
+  })
   lookup <- lookup[sapply(lookup, function(x) !is.null(x))]
   lookup <- unlist(lookup)
 
@@ -286,10 +286,22 @@ generate_gene_mapping <- function(db) {
 #' @export
 #'
 #' @examples
+#' dummypath <- system.file("tests/testthat/extdata/dummy.gtf",
+#' package = "genofeatutil")
+#' dmeldb <- make_database(species = "dmel",
+#'                            gtf.path = dummypath)
+#' update_fbgn("FBgn0032045", db = dmeldb)
 update_fbgn <- function (id, db) {
   # Convert out-dated FBid to current version
   ## Load lookup table
-  version_dict <- db[["id_dict"]]
+  if ("id_dict" %in% names(db)) {
+    version_dict <- db[["id_dict"]]
+  } else {
+    stop(strwrap("The database list seems to be wrong. Please make sure that
+                 you generated it by prepare_database() before using gene
+                 name conversion functions."))
+  }
+
   ## Find FBid that need conversion
   index_update <- id %in% names(version_dict)
   ## Convert with lookup table while keeping the order
