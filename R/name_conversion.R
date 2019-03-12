@@ -71,8 +71,8 @@ make_database <- function(species = "dmel", gtf.path, version = NULL) {
                          version = version)
 
   # Generate conversion vectors for FBgn update
-  db <- generate_fbid_version_table(db,
-                                    version = db[["metadata"]]["FlyBase_ver"])
+  db <- generate_fbid_version_table(db)
+
   # Generate conversion vectors from the synonym table
   db <- generate_flybase_sym(db)
   db <- generate_gene_mapping(db)
