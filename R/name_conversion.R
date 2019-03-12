@@ -13,7 +13,12 @@
 #' @param gene a character vector containing gene names
 #'
 #' @return a character vector containing prefixed and converted gene names
+#' @export
+#'
 #' @seealso \code{\link{denormalize_genename}()}
+#'
+#' @examples
+#' normalize_genename("128up")
 normalize_genename <- function(gene) {
   # Make gene names legal colnames which can be safely reversed by removing the "gn_" prefix
   genelist <- paste0("gn_", gene)
@@ -31,6 +36,12 @@ normalize_genename <- function(gene) {
 #'
 #' @return a character vector containing converted gene names with prefix
 #' removed
+#' @export
+#' @examples
+#' gene <- normalize_genename("128up")
+#' # [1] "gn_128up"
+#' denormalize_genename(gene)
+#' # [1] "128up"
 denormalize_genename <- function(gene) {
   name <- substr(start = 4, stop = nchar(gene), gene)
   return(name)
@@ -60,7 +71,8 @@ make_database <- function(species = "dmel", gtf.path, version = NULL) {
                          version = version)
 
   # Generate conversion vectors for FBgn update
-  db <- generate_fbid_version_table(db)
+  db <- generate_fbid_version_table(db,
+                                    version = db[["metadata"]]["FlyBase_ver"])
   # Generate conversion vectors from the synonym table
   db <- generate_flybase_sym(db)
   db <- generate_gene_mapping(db)
