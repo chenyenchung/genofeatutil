@@ -458,7 +458,7 @@ convert_to_genename <- function(x, db, normalize = TRUE) {
     result <- dict[mapped]
     warning(paste("The following FlyBase gene numbers are not found in the",
                   "GTF file you loaded:",
-                  paste(x[!mapped], collapse = ", ")))
+                  paste(x[!mapped_index], collapse = ", ")))
   }
 
   if (normalize) {
