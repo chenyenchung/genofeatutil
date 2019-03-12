@@ -14,7 +14,6 @@ Suggests:
     testthat
 Imports: 
     Seurat (>= 3.0.0),
-    dplyr,
     feather,
     rtracklayer,
     data.table,

@@ -410,7 +410,7 @@ convert_gene_to_fbgn <- function(genes, db) {
 #' names.
 #'
 #' @export
-#' @example
+#' @examples
 #' # Make databases from dummy data
 #' dummypath <- system.file("extdata", "dummy.gtf",
 #' package = "genofeatutil")

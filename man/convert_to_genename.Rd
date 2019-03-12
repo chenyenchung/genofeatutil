@@ -22,3 +22,12 @@ FlyBase gene numbers and uses the database list
 \code{\link{make_database}()} generated to convert them to gene names that
 are consistent with the version of the provided GTF file.
 }
+\examples{
+# Make databases from dummy data
+dummypath <- system.file("extdata", "dummy.gtf",
+package = "genofeatutil")
+testdb <- make_database(species = "test",
+gtf.path = dummypath)
+
+convert_to_genename("FBgn0086917", testdb)
+}
