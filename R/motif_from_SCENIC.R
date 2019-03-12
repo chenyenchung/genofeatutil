@@ -43,8 +43,6 @@ motif_to_tf <- function(x, motif_db, db) {
 #' @return a list of genes and related transcription factors based on motif
 #' info
 #' @export
-#'
-#' @examples
 get_motif_info <- function(score_path, motif_path, number = NULL,
                            threshold = NULL, genes.use = NULL, db) {
   # It reads the motif score data from SCENIC

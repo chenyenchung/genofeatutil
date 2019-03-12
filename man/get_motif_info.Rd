@@ -25,6 +25,10 @@ Usually the targets) in the output motif list}
 
 \item{db}{a list from \code{make_database()}}
 }
+\value{
+a list of genes and related transcription factors based on motif
+info
+}
 \description{
 Generate a Top Motif List Adjacent to Input Genes Based on SCENIC /
 RcisTarget Database

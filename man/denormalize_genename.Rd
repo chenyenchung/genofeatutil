@@ -18,3 +18,9 @@ removed
 \code{\link{normalize_genename}()} adds, and make the gene names more
 readable for humans.
 }
+\examples{
+gene <- normalize_genename("128up")
+# [1] "gn_128up"
+denormalize_genename(gene)
+# [1] "128up"
+}
