@@ -411,6 +411,13 @@ convert_gene_to_fbgn <- function(genes, db) {
 #'
 #' @export
 #' @example
+#' # Make databases from dummy data
+#' dummypath <- system.file("extdata", "dummy.gtf",
+#' package = "genofeatutil")
+#' testdb <- make_database(species = "test",
+#' gtf.path = dummypath)
+#'
+#' convert_to_genename("FBgn0086917", testdb)
 convert_to_genename <- function(x, db, normalize = TRUE) {
   if (!"to_name_dict" %in% names(db)) {
     stop(paste("The database list seems to be wrong. Please make sure that",
