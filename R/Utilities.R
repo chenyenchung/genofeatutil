@@ -65,8 +65,8 @@ calculate_gene_cor <- function(data, gene1, gene2,
   # Calculate correlation of genes from an expression matrix
   # The genes are selected based on column names
   if (!is.matrix(data) & !is.data.frame(data)) {
-    stop(strwrap("calculate_gene_core only takes a matrix or
-                 a data frame as input data."))
+    stop(paste("calculate_gene_core() only takes a matrix or",
+               "a data frame as input data."))
   }
   if (use.row) {
     gene_names <- row.names(data)

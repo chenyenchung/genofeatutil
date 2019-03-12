@@ -27,8 +27,8 @@ get_fbase_url <- function(version = NULL, dirstr = NULL) {
 
   # Check if the version number is legal
   if (!grepl("^FB[0-9]{4}_[0-9]{2}", version)) {
-    stop(strwrap("The format for version number seems to be wrong.
-                 It is FB[year]_[month] (e.g., 'FB2019_01')."))
+    stop(paste("The format for version number seems to be wrong.",
+               "It is FB[year]_[month] (e.g., 'FB2019_01')."))
   }
 
   # Extract available version on the server

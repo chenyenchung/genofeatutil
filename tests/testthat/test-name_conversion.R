@@ -84,6 +84,32 @@ test_that("update_fbgn", {
     db = testdb
   )
   expect_equal(vector_convert, rep("FBgn0262029", 7))
-
-
 })
+
+
+test_that("convert_gene_to_fbgn", {
+  # prepare_database() --------------------------------------------------
+  dummypath <- system.file("extdata", "dummy.gtf",
+                           package = "genofeatutil")
+  testdb <- make_database(species = "test",
+                          gtf.path = dummypath)
+  rawdb <- prepare_database(species = "test",
+                            gtf.path = dummypath)
+
+  # Reject incorrect db
+  expect_error(convert_gene_to_fbgn("CG31610", db = rawdb))
+
+  # Dummy query
+  query <- c("d", "CG31610", "mt:dummy", "robo")
+  exp_id <- c("FBgn0262029", "FBgn0262029")
+
+  expect_equal(convert_gene_to_fbgn(query[1:3], db = testdb),
+               exp_id)
+
+  # Test detection of multiple alias mapping
+  dummymulti <- c("FBgn0000001", "FBgn0000002")
+  names(dummymulti) <- c("a", "a")
+  testdb[["alias_dict"]] <- c(testdb[["alias_dict"]], dummymulti)
+  expect_warning(convert_gene_to_fbgn("a", db = testdb))
+})
+

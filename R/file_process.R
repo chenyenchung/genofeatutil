@@ -35,8 +35,8 @@ load_rdata <- function(file) {
   obj_name <- setdiff(ls(), current_envir)
   ## Remind the user if more than one variable is in the file.
   if (length(obj_name) > 1) {
-    stop(strwrap("This .rdata file contains more than 1 object and is likely to
-                 be an environment. Please load it with load()."))
+    stop(paste("This .rdata file contains more than 1 object and is likely to",
+               "be an environment. Please load it with load()."))
   }
   ## Return the variable to allow assignment
   object <- get(obj_name)

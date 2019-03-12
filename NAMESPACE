@@ -3,6 +3,7 @@
 S3method(get_gene_names,Seurat)
 S3method(get_gene_names,default)
 export(calculate_gene_cor)
+export(convert_gene_to_fbgn)
 export(get_gene_names)
 export(load_rdata)
 export(make_database)
