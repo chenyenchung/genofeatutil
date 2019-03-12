@@ -241,31 +241,11 @@ generate_gene_mapping <- function(db) {
                "name conversion functions."))
   }
   id_mapping <- db[["gtf"]]
-  id_update_dict <- db[["id_dict"]]
 
   # Update FBgn
   if (db[["metadata"]]["species"] %in% c("dmel", "test")) {
     id_mapping$gene_id <- update_fbgn(id_mapping$gene_id, db = db)
   }
-
-
-  # If x is not already a character vector, get gene names from x first
-  # if (!is.character(x)) {
-    # x <- get_gene_names(x, ...)
-  # }
-
-  # Check if there are genes not found in the reference
-  # x_found <- x[x %in% id_mapping$gene_name]
-  # if (length(x) != length(x_found)) {
-    # warning(strwrap("Some gene names are not found in the GTF file.
-            # Please check if the version is correct."))
-    # message("The genes not seen in the GTF file include: ",
-            # paste(setdiff(x, x_found), collapse = ", "),
-            # ".")
-  # }
-
-  # Only keep the part of GTF that contains the input gene names
-  # id_mapping <- id_mapping[id_mapping$gene_name %in% x, ]
 
   result <- id_mapping$gene_name
   names(result) <- id_mapping$gene_id
@@ -415,19 +395,81 @@ convert_gene_to_fbgn <- function(genes, db) {
 }
 
 
-#' @param x a character vector, a data frame / matrix containing an expression
-#' matrix, or a Seurat object
-convert_fbgn_to_gene <- function(fbgn, db) {
-  # Convert a list of fly gene names to make it compatible
-  # with the 10X gene names in the Seurat object
+#' Convert Gene Names or FlyBase Gene Numbers to Gene Names Specified in the
+#' Database
+#'
+#' \code{convert_to_genename()} takes a character vector of gene names and
+#' FlyBase gene numbers and uses the database list
+#' \code{\link{make_database}()} generated to convert them to gene names that
+#' are consistent with the version of the provided GTF file.
+#'
+#' @inheritParams distinguish_fbgn
+#' @param db a list from \code{make_database()}
+#' @param normalize a logical expression. If set as TRUE, it will call
+#' \code{\link{normalize_genename}()} to make consistent the converted gene
+#' names.
+#'
+#' @export
+#' @example
+convert_to_genename <- function(x, db, normalize = TRUE) {
+  if (!"to_name_dict" %in% names(db)) {
+    stop(paste("The database list seems to be wrong. Please make sure that",
+               "you generated it by prepare_database() before using gene",
+               "name conversion functions."))
+  }
+  genename_index <- !distinguish_fbgn(x)
+  if (length(which(genename_index)) > 0) {
+    # Convert gene names to FBgn
+    converted_names <- convert_gene_to_fbgn(x[genename_index], db)
+    if (length(converted_names) == length(x[genename_index])) {
+      x[genename_index] <- converted_names
+    } else {
+      x <- c(x[!genename_index], converted_names)
+      warning(paste("Because there were multiple mappings of the aliases,",
+                    "please note that the length and  order of the output is",
+                    "different from the input."))
+    }
+  }
 
-  ## Generate a named list from the Seurat object
-  ## work as a dictionary for conversion
+  # Examine duplication
+  dup_all <- Reduce(`|`, duplicated(x))
+  if (dup_all) {
+    x <- unique(x)
+    warning(paste("There are duplications of genes in your input, and",
+                  "duplicated items are removed. As a result, the order and",
+                  "length of output won't be the same as the input."))
+  }
 
-  input_fbid <- convert_fbid(name, flybase_sym)
-  ## Throw away genes that are not present in 10X
-  input_fbid <- input_fbid[input_fbid %in% names(dict_10X)]
-  name_10Xformat <- dict_10X[input_fbid]
-  name_10Xformat <- normalize_genename(name_10Xformat)
-  return(name_10Xformat)
+  # Convert to gene name
+  dict <- db[["to_name_dict"]]
+  mapped_index <- x %in% names(dict)
+  map_all <- Reduce(`&`, mapped_index)
+  if(map_all) {
+    result <- dict[x]
+  } else {
+    mapped <- x[mapped_index]
+    result <- dict[mapped]
+    warning(paste("The following FlyBase gene numbers are not found in the",
+                  "GTF file you loaded:",
+                  paste(x[!mapped], collapse = ", ")))
+  }
+
+  if (normalize) {
+    result <- normalize_genename(result)
+  }
+  return(result)
+}
+
+#' Distinguish FlyBase Gene Numbers from Gene Names
+#'
+#' @param x a character vector containing genes and FlyBase gene numbers
+#'
+#' @return a logical vector
+distinguish_fbgn <- function(x) {
+  if (!is.character(x)) {
+    stop(paste("distinguish_fbgn() takes only a character vector of FlyBase",
+               "gene numbers or gene names"))
+  }
+  FBgn_index <- grepl("^FBgn", x)
+  return(FBgn_index)
 }

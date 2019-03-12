@@ -17,7 +17,7 @@ test_that("normalize and denormalize gene names", {
 })
 
 test_that("Things that require the database prepared", {
-  # prepare_database() --------------------------------------------------
+  # prepare_database()
   dummypath <- system.file("extdata", "dummy.gtf",
                            package = "genofeatutil")
   # Unsupported species error
@@ -41,7 +41,7 @@ test_that("Things that require the database prepared", {
 })
 
 test_that("generate_gene_mapping", {
-  # prepare_database() --------------------------------------------------
+  # prepare_database()
   dummypath <- system.file("extdata", "dummy.gtf",
                            package = "genofeatutil")
   testdb <- prepare_database(species = "test",
@@ -63,8 +63,10 @@ test_that("generate_gene_mapping", {
   expect_true("to_name_dict" %in% names(test_mapping))
 })
 
+# update_fbgn() -----------------------------------------------------------
+
 test_that("update_fbgn", {
-  # prepare_database() --------------------------------------------------
+  # prepare_database()
   dummypath <- system.file("extdata", "dummy.gtf",
                            package = "genofeatutil")
   testdb <- make_database(species = "test",
@@ -73,7 +75,7 @@ test_that("update_fbgn", {
                             gtf.path = dummypath)
 
 
-  # update_fbgn -----------------------------------------------------------
+  # update_fbgn
   expect_error(update_fbgn("FBgn0032045", db = rawdb),
                regexp = "The database list seems to be wrong.")
   single_convert <- update_fbgn("FBgn0032045", db = testdb)
@@ -86,9 +88,10 @@ test_that("update_fbgn", {
   expect_equal(vector_convert, rep("FBgn0262029", 7))
 })
 
+# convert_gene_to_fbgn() --------------------------------------------------
 
 test_that("convert_gene_to_fbgn", {
-  # prepare_database() --------------------------------------------------
+  # prepare_database()
   dummypath <- system.file("extdata", "dummy.gtf",
                            package = "genofeatutil")
   testdb <- make_database(species = "test",
@@ -113,3 +116,34 @@ test_that("convert_gene_to_fbgn", {
   expect_warning(convert_gene_to_fbgn("a", db = testdb))
 })
 
+# distinguish_fbgn() ------------------------------------------------------
+
+
+test_that("distinguish_fbgn", {
+  test <- c("FBgn1",
+            "FBgn2",
+            "Cha")
+  expect_equal(distinguish_fbgn(test), c(TRUE, TRUE, FALSE))
+  expect_error(distinguish_fbgn(c(1:10)))
+})
+
+
+# convert_to_gene_name() --------------------------------------------------
+
+
+test_that("convert_to_genename", {
+  # prepare_database()
+  dummypath <- system.file("extdata", "dummy.gtf",
+                           package = "genofeatutil")
+  testdb <- make_database(species = "test",
+                          gtf.path = dummypath)
+  rawdb <- prepare_database(species = "test",
+                            gtf.path = dummypath)
+  expect_error(convert_to_genename("Cha", db = rawdb))
+  expect_equivalent(convert_to_genename("FBgn0086917", testdb),
+               normalize_genename("spok"))
+  expect_equivalent(convert_to_genename("FBgn0086917", testdb,
+                                        normalize = FALSE),
+               "spok")
+
+})

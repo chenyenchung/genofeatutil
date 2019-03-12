@@ -31,5 +31,5 @@ testdb <- make_database(species = "test",
 gtf.path = dummypath)
 
 # Convert gene names
-convert_gene_to_fbgn("CG31610", db = rawdb)
+convert_gene_to_fbgn("CG31610", db = testdb)
 }
