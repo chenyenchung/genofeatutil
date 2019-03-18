@@ -16,29 +16,79 @@ test_that("normalize and denormalize gene names", {
   expect_match(denormalized, "^128")
 })
 
-test_that("Things that require the database prepared", {
-  # prepare_database()
+
+# prepare_database() ---------------------
+test_that("prepare_database()", {
+
   dummypath <- system.file("extdata", "dummy.gtf",
                            package = "genofeatutil")
   # Unsupported species error
   expect_error(prepare_database(species = "cele",
                                 gtf.path = dummypath),
                regexp = "prepare_database does not support")
+
   testdb <- prepare_database(species = "test",
                              gtf.path = dummypath)
+
   # Output structure check
   expect_equal(sort(names(testdb)), c("fbid", "gtf", "metadata", "syno"))
 
+  # GTF sanity check
+  expect_true(Reduce(`&`, testdb[["gtf"]]$type == "gene"))
 
-  # generate_flybase_sym() ------------------------------------------------
+  # FBid sanity check
+  colnames_fbid <- c("primary_FBgn#", "secondary_FBgn#(s)")
+  expect_true(Reduce(`&`, colnames_fbid %in% colnames(testdb[["fbid"]])))
+
+  # Synonym sanity check
+  expect_true(Reduce(`&`, testdb[["syno"]]$organism_abbreviation == "Dmel"))
+  colnames_syno <- c("##primary_FBid", "current_symbol", "symbol_synonym(s)")
+  expect_true(Reduce(`&`, colnames_syno %in% colnames(testdb[["syno"]])))
+})
+
+
+# generate_flybase_sym() ------------------------------------------------
+test_that("generate_flybase_sym()", {
+  dummypath <- system.file("extdata", "dummy.gtf",
+                           package = "genofeatutil")
+  testdb <- prepare_database(species = "test",
+                             gtf.path = dummypath)
+
+  # Check proper input
+  expect_error(generate_flybase_sym(testdb[names(testdb) != "syno"]))
 
   testsym <- generate_flybase_sym(testdb)
+
   # Check output structure
-  expect_output(str(testsym), "List of 5")
   expect_true(Reduce(`&`, c("symbol_dict", "alias_dict") %in% names(testsym)))
   expect_match(testsym[["symbol_dict"]][1], "FBgn")
   expect_match(testsym[["alias_dict"]][1], "FBgn")
 })
+
+# generate_fbid_version_table() -----------------------------------------
+test_that("generate_fbid_version_table()", {
+  dummypath <- system.file("extdata", "dummy.gtf",
+                           package = "genofeatutil")
+  testdb <- prepare_database(species = "test",
+                             gtf.path = dummypath)
+
+  # Check proper input
+  expect_error(generate_fbid_version_table(testdb[names(testdb) != "fbid"]))
+
+  fbtable_plus <- generate_fbid_version_table(testdb)
+  # Check output structure
+  expect_true("id_dict" %in% names(fbtable_plus))
+  expect_false("fbid" %in% names(fbtable_plus))
+
+  # Output sanity check
+  value_fbgn <- grepl("^FBgn", fbtable_plus[["id_dict"]])
+  names_fbgn <- grepl("^FBgn", names(fbtable_plus[["id_dict"]]))
+  expect_true(Reduce(`&`, value_fbgn))
+  expect_true(Reduce(`&`, names_fbgn))
+})
+
+
+# generate_gene_mapping() -------------------------------------------------
 
 test_that("generate_gene_mapping", {
   # prepare_database()
@@ -48,19 +98,24 @@ test_that("generate_gene_mapping", {
                              gtf.path = dummypath)
   testdb <- generate_fbid_version_table(testdb)
 
-  # generate_gene_mapping() ----------------------------------------------
-
   # Prepare dummy data
-  genes <- c("CR41571", "CG45784")
-  ids <- c("FBgn0085804", "FBgn0267431")
   notgtf <- testdb[names(testdb) != "gtf"]
+  notiddict <- testdb[names(testdb) != "id_dict"]
 
   # Unmapped gene warning
   expect_error(generate_gene_mapping(db = notgtf),
                regexp = "The database list seems to be wrong.")
+  expect_error(generate_gene_mapping(db = notiddict),
+               regexp = "An id conversion table is required.")
   test_mapping <- generate_gene_mapping(db = testdb)
   expect_true(!"gtf" %in% names(test_mapping))
   expect_true("to_name_dict" %in% names(test_mapping))
+
+  # Result sanity check
+  genemap_names <- names(test_mapping[["to_name_dict"]])
+
+  ## The names are expected to be FlyBase gene numbers
+  expect_true(Reduce(`&`, grepl("^FBgn", genemap_names)))
 })
 
 # update_fbgn() -----------------------------------------------------------
@@ -76,16 +131,16 @@ test_that("update_fbgn", {
 
 
   # update_fbgn
-  expect_error(update_fbgn("FBgn0032045", db = rawdb),
+  expect_error(update_fbgn("FBgn0000001", db = rawdb),
                regexp = "The database list seems to be wrong.")
-  single_convert <- update_fbgn("FBgn0032045", db = testdb)
-  expect_equal(single_convert, "FBgn0262029")
+  single_convert <- update_fbgn("FBgn0000012", db = testdb)
+  expect_equal(single_convert, "FBgn0000001")
   vector_convert <- update_fbgn(
-    c("FBgn0032045", "FBgn0086896", "FBgn0000410", "FBgn0025975",
-      "FBgn0032046", "FBgn0051610", "FBgn0069196"),
+    c("FBgn0000012", "FBgn0000013", "FBgn0000014", "FBgn0000015",
+      "FBgn0000016", "FBgn0000017", "FBgn0000018"),
     db = testdb
   )
-  expect_equal(vector_convert, rep("FBgn0262029", 7))
+  expect_equal(vector_convert, paste0("FBgn000000", seq(7)))
 })
 
 # convert_gene_to_fbgn() --------------------------------------------------
@@ -100,20 +155,17 @@ test_that("convert_gene_to_fbgn", {
                             gtf.path = dummypath)
 
   # Reject incorrect db
-  expect_error(convert_gene_to_fbgn("CG31610", db = rawdb))
+  expect_error(convert_gene_to_fbgn("gene_1", db = rawdb))
 
   # Dummy query
-  query <- c("d", "CG31610", "mt:dummy", "robo")
-  exp_id <- c("FBgn0262029", "FBgn0262029")
+  query <- c("gene_1", "alias_2.1", "mt:dummy", "alias_3.3", "gene_21")
+  exp_id <- c("FBgn0000001", "FBgn0000002", "FBgn0000003")
 
-  expect_equal(convert_gene_to_fbgn(query[1:3], db = testdb),
+  expect_equal(convert_gene_to_fbgn(query[1:4], db = testdb),
                exp_id)
 
   # Test detection of multiple alias mapping
-  dummymulti <- c("FBgn0000001", "FBgn0000002")
-  names(dummymulti) <- c("a", "a")
-  testdb[["alias_dict"]] <- c(testdb[["alias_dict"]], dummymulti)
-  expect_warning(convert_gene_to_fbgn("a", db = testdb))
+  expect_warning(convert_gene_to_fbgn("alias_confuse", db = testdb))
 })
 
 # distinguish_fbgn() ------------------------------------------------------
@@ -140,6 +192,7 @@ test_that("convert_to_genename", {
   rawdb <- prepare_database(species = "test",
                             gtf.path = dummypath)
   expect_error(convert_to_genename("Cha", db = rawdb))
+  expect_error(convert_to_genename(x = NULL , db = testdb))
   expect_equivalent(convert_to_genename("FBgn0086917", testdb),
                normalize_genename("spok"))
   expect_equivalent(convert_to_genename("FBgn0086917", testdb,

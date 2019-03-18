@@ -1,0 +1,21 @@
+#motif_id	motif_name	motif_description	source_name	source_version	gene_name	motif_similarity_qvalue	similar_motif_id	similar_motif_description	orthologous_identity	orthologous_gene_name	orthologous_species	description
+motif_1	Abd-B	Abd-B	bergman	1.1	tf_1-B	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_2	Adf1	Adf1	bergman	1.1	tf_1	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_3	Aef1	Aef1	bergman	1.1	tf_1	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_4	Cf2	Cf2	bergman	1.1	tf_2	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_5	Dip3	Dip3	bergman	1.1	tf_2	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_6	Dref	Dref	bergman	1.1	tf_2	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_7	EcR_usp	EcR/usp	bergman	1.1	tf_2	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_8	EcR_usp	EcR/usp	bergman	1.1	tf_2	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_9	EcR_usp	EcR/usp	bergman	1.1	tf_2	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_10	EcR_usp	EcR/usp	bergman	1.1	tf_3	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_11	Eip74EF	Eip74EF	bergman	1.1	tf_3	0.000096	hocomoco__GABP1_HUMAN.H10MO.C	GABP1_HUMAN	0.174957	ENSG00000104064	H. sapiens	gene is orthologous to ENSG00000104064 in H. sapiens (identity = 17%) which is annotated for similar motif hocomoco__GABP1_HUMAN.H10MO.C ('GABP1_HUMAN'; q-value = 9.57e-05)
+motif_12	EcR_usp	EcR/usp	bergman	1.1	tf_3	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_13	EcR_usp	EcR/usp	bergman	1.1	tf_3	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_14	EcR_usp	EcR/usp	bergman	1.1	tf_4	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_15	EcR_usp	EcR/usp	bergman	1.1	tf_4	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_16	EcR_usp	EcR/usp	bergman	1.1	tf_4	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_17	EcR_usp	EcR/usp	bergman	1.1	tf_5	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_18	EcR_usp	EcR/usp	bergman	1.1	tf_5	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_19	EcR_usp	EcR/usp	bergman	1.1	tf_5	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_20	EcR_usp	EcR/usp	bergman	1.1	tf_5	0.000000	None	None	1.000000	None	None	gene is directly annotated

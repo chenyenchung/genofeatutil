@@ -7,7 +7,7 @@
 #' names). This automatic confusion might interfere with name matching.
 #' \code{normalize_genename()} converts gene names to make them legal variable
 #' names, thereby make sure the gene names compared are consistently after
-#' conversion. \code{normalize_genename()} will add a prefix (gn_) to gene
+#' conversin. \code{normalize_genename()} will add a prefix (gn_) to gene
 #' names to make gene names starting with a number legal, and then calls
 #' \code{\link[base]{make.names}()} to convert illegal punctuations.
 #' @param gene a character vector containing gene names
@@ -121,10 +121,11 @@ prepare_database <- function(species = "dmel", gtf.path, version = NULL) {
                             package = "genofeatutil")
     result <- fetch_flybase(paths = c(fbgnpath,
                                       synopath))
+    version <- "test"
   }
 
   # Keep gene id and gene name from the GTF file
-  gtf <- id_mapping[ , c("gene_id", "gene_name")]
+  gtf <- id_mapping[ , c("gene_id", "type", "gene_name")]
   result[["gtf"]] <- gtf
   result[["metadata"]] <- c("species" = species,
                             "date" = date(),
@@ -146,12 +147,17 @@ generate_flybase_sym <- function(db) {
   # with which you can use alias/name to query FBid
   # Usage: named_vector <- generate_flybase_sym([the tsv file])
   # named_vector[*alias/name*] gives its corresponding flybase id
+  if (!"syno" %in% names(db)) {
+    stop(paste("The database list seems to be wrong. Please make sure that",
+               "you generated it by prepare_database() before using gene",
+               "name conversion functions."))
+  }
+
   fbsym <- db[["syno"]]
 
   # Keep only Drosophila genes
-  colnames(fbsym)[1] <- "primary_fbid"
   fbsym <- fbsym[fbsym$organism_abbreviation == "Dmel", ]
-  fbsym <- fbsym[grepl("^FBgn", fbsym$primary_fbid), ]
+  fbsym <- fbsym[grepl("^FBgn", fbsym$`##primary_FBid`), ]
 
   # Generate a named vector with *aliases as names* and
   # *fbid as values*
@@ -159,7 +165,7 @@ generate_flybase_sym <- function(db) {
   for (row in seq(nrow(fbsym))) {
     alias <- strsplit(fbsym[row, "symbol_synonym(s)"], ",")[[1]]
     if (length(alias) > 0) {
-      fbid <- fbsym[row, "primary_fbid"]
+      fbid <- fbsym[row, "##primary_FBid"]
       dict <- rep(fbid, length(alias))
       names(dict) <- normalize_genename(alias)
       alias_dict_list[[fbid]] <- dict
@@ -178,7 +184,7 @@ generate_flybase_sym <- function(db) {
 
   # Generate a named vector with *symbols as names* and
   # *fbid as values*
-  symbol_dict <- fbsym$primary_fbid
+  symbol_dict <- fbsym$`##primary_FBid`
   names(symbol_dict) <- normalize_genename(fbsym$current_symbol)
 
   # Add conversion vectors into db and remove raw data
@@ -201,6 +207,12 @@ generate_flybase_sym <- function(db) {
 #' @return a list without FBgn ID annotation table but with a derived
 #' conversion vector
 generate_fbid_version_table <- function(db) {
+  if (!"fbid" %in% names(db)) {
+    stop(paste("The database list seems to be wrong. Please make sure that",
+               "you generated it by prepare_database() before using gene",
+               "name conversion functions."))
+  }
+
   # Read the FBgn annotation table from FlyBase
   id_table <- db[["fbid"]]
 
@@ -256,6 +268,11 @@ generate_gene_mapping <- function(db) {
 
   # Update FBgn
   if (db[["metadata"]]["species"] %in% c("dmel", "test")) {
+    if (!"id_dict" %in% names(db)) {
+      stop(paste("An id conversion table is required to update FlyBase gene",
+                 "numbers. If you see this error message, it could be an error",
+                 "in an internal function, generate_fbid_version_table()."))
+    }
     id_mapping$gene_id <- update_fbgn(id_mapping$gene_id, db = db)
   }
 
@@ -291,7 +308,7 @@ update_fbgn <- function (id, db) {
     version_dict <- db[["id_dict"]]
   } else {
     stop(paste("The database list seems to be wrong. Please make sure that",
-               "you generated it by prepare_database() before using gene",
+               "you generated it by make_database() before using gene",
                "name conversion functions."))
   }
 
@@ -342,7 +359,7 @@ convert_gene_to_fbgn <- function(genes, db) {
   ## Reading from the db
   if (!"symbol_dict" %in% names(db) | !"alias_dict" %in% names(db)) {
     stop(paste("The database list seems to be wrong. Please make sure that",
-               "you generated it by prepare_database() before using gene",
+               "you generated it by make_database() before using gene",
                "name conversion functions."))
   }
   symbol_dict <- db[["symbol_dict"]]
@@ -364,14 +381,9 @@ convert_gene_to_fbgn <- function(genes, db) {
   # Find the names that are not official symbols but are documented aliases
   index_alias <-
     !(genes %in% names(symbol_dict)) & (genes %in% names(alias_dict))
-  genes[index_alias] <- alias_dict[genes[index_alias]]
-
-  # Keep only the FBgn of official symbols and the aliases and drop uncoverted
-  # ones
-  unmapped <- genes[!(index_symbol | index_alias)]
-  genes <- genes[index_symbol | index_alias]
 
   ## Create warnings if there's multiple mapping for aliases
+  multialias <- vector()
   for (item in genes[index_alias]) {
     matching_num <- sum(names(alias_dict) == item)
     if (matching_num > 1) {
@@ -380,15 +392,22 @@ convert_gene_to_fbgn <- function(genes, db) {
                      "' is matched with multiple aliases. All the FBgn ",
                      "that correspond to it will be append to the end ",
                      "of the result.")
-                     )
+      )
 
       # Create a vector of the rest of the alias:FBgn pair a non-unique
       # alias mapped to, and append that to the alias vector.
       multimap_id <- alias_dict[names(alias_dict) == item][-1]
-      alias <- append(x = genes,
-                      values =  multimap_id)
+      multialias <- append(x = multialias,
+                           values =  multimap_id)
     }
   }
+  genes[index_alias] <- alias_dict[genes[index_alias]]
+  genes <- c(genes, unname(multialias))
+
+  # Keep only the FBgn of official symbols and the aliases and drop uncoverted
+  # ones
+  unmapped <- genes[!(index_symbol | index_alias)]
+  genes <- genes[index_symbol | index_alias]
 
   ## Remind the user about non-convertible gene names
   if (length(unmapped) > 0) {
@@ -433,14 +452,22 @@ convert_gene_to_fbgn <- function(genes, db) {
 convert_to_genename <- function(x, db, normalize = TRUE) {
   if (!"to_name_dict" %in% names(db)) {
     stop(paste("The database list seems to be wrong. Please make sure that",
-               "you generated it by prepare_database() before using gene",
+               "you generated it by make_database() before using gene",
                "name conversion functions."))
   }
+
+  if (length(x) == 0) {
+    stop("There is no gene names or FlyBase gene numbers provided to convert.")
+  }
+
   genename_index <- !distinguish_fbgn(x)
+
   if (length(which(genename_index)) > 0) {
     # Convert gene names to FBgn
     converted_names <- convert_gene_to_fbgn(x[genename_index], db)
     if (length(converted_names) == length(x[genename_index])) {
+      # If there's no multiple mapping, it can be safely saved in the
+      # original vector without error
       x[genename_index] <- converted_names
     } else {
       x <- c(x[!genename_index], converted_names)
