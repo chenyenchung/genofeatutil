@@ -11,7 +11,9 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: 
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 Imports: 
     Seurat (>= 3.0.0),
     feather,
@@ -23,3 +25,4 @@ Imports:
     stats,
     utils
 RoxygenNote: 6.1.1
+VignetteBuilder: knitr

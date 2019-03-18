@@ -15,6 +15,9 @@ convert_to_genename(x, db, normalize = TRUE, remove.dup = TRUE)
 \item{normalize}{a logical expression. If set as TRUE, it will call
 \code{\link{normalize_genename}()} to make consistent the converted gene
 names.}
+
+\item{remove.dup}{a logical value to decide whether to remove duplication in
+the input vector. The default is TRUE.}
 }
 \description{
 \code{convert_to_genename()} takes a character vector of gene names and
