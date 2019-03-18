@@ -5,7 +5,7 @@
 \title{Convert Gene Names or FlyBase Gene Numbers to Gene Names Specified in the
 Database}
 \usage{
-convert_to_genename(x, db, normalize = TRUE)
+convert_to_genename(x, db, normalize = TRUE, remove.dup = TRUE)
 }
 \arguments{
 \item{x}{a character vector containing genes and FlyBase gene numbers}

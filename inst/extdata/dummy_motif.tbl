@@ -1,5 +1,5 @@
 #motif_id	motif_name	motif_description	source_name	source_version	gene_name	motif_similarity_qvalue	similar_motif_id	similar_motif_description	orthologous_identity	orthologous_gene_name	orthologous_species	description
-motif_1	Abd-B	Abd-B	bergman	1.1	tf_1-B	0.000000	None	None	1.000000	None	None	gene is directly annotated
+motif_1	Abd-B	Abd-B	bergman	1.1	tf_1	0.000000	None	None	1.000000	None	None	gene is directly annotated
 motif_2	Adf1	Adf1	bergman	1.1	tf_1	0.000000	None	None	1.000000	None	None	gene is directly annotated
 motif_3	Aef1	Aef1	bergman	1.1	tf_1	0.000000	None	None	1.000000	None	None	gene is directly annotated
 motif_4	Cf2	Cf2	bergman	1.1	tf_2	0.000000	None	None	1.000000	None	None	gene is directly annotated

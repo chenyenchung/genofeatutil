@@ -30,6 +30,9 @@ a list of genes and related transcription factors based on motif
 info
 }
 \description{
-Generate a Top Motif List Adjacent to Input Genes Based on SCENIC /
-RcisTarget Database
+\code{get_motif_info()} reads a motif scoring table and motif name table
+from RcisTarget, and then filter it according to the set threshold on score
+or the number of candidates to keep. it returns a list, in which the names
+of the items are the name of the target gene, and each item is a character
+vector of transcription factors.
 }

@@ -20,7 +20,7 @@ saved as column names (which R assumes that they should be legal variable
 names). This automatic confusion might interfere with name matching.
 \code{normalize_genename()} converts gene names to make them legal variable
 names, thereby make sure the gene names compared are consistently after
-conversion. \code{normalize_genename()} will add a prefix (gn_) to gene
+conversin. \code{normalize_genename()} will add a prefix (gn_) to gene
 names to make gene names starting with a number legal, and then calls
 \code{\link[base]{make.names}()} to convert illegal punctuations.
 }

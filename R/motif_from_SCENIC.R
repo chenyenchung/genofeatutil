@@ -17,7 +17,7 @@ motif_to_tf <- function(x, motif_db, db) {
     match_row <- motif_tbl[ , 1] %in% y
     if (length(match_row) > 0) {
       tfnames <- motif_tbl$gene_name[match_row]
-      tfnames <- convert_to_genename(x = tfnames, db = db)
+      tfnames <- convert_to_genename(x = tfnames, db = db, remove.dup = FALSE)
       return(tfnames)
     }
   })
@@ -28,6 +28,12 @@ motif_to_tf <- function(x, motif_db, db) {
 
 #' Generate a Top Motif List Adjacent to Input Genes Based on SCENIC /
 #' RcisTarget Database
+#'
+#' \code{get_motif_info()} reads a motif scoring table and motif name table
+#' from RcisTarget, and then filter it according to the set threshold on score
+#' or the number of candidates to keep. it returns a list, in which the names
+#' of the items are the name of the target gene, and each item is a character
+#' vector of transcription factors.
 #'
 #' @param score_path a character string of the path to the scoring database
 #' from SCENIC / RcisTarget
@@ -54,7 +60,7 @@ get_motif_info <- function(score_path, motif_path, number = NULL,
   scoreMat <- scoreMat[ , colnames(scoreMat) != "features"]
 
   gene_motif_list <- lapply(as.list(scoreMat), function(x) {
-    motifs <- motif_name[x > threshold]
+    motifs <- motif_name
     if (!is.null(threshold)) {
       motifs <- motif_name[x > threshold]
       x <- x[x > threshold]
@@ -71,7 +77,14 @@ get_motif_info <- function(score_path, motif_path, number = NULL,
   # Removing empty entries
   gene_motif_list <- gene_motif_list[sapply(gene_motif_list,
                                             function(x) length(x) > 0)]
-  names(gene_motif_list) <- convert_to_genename(names(gene_motif_list), db = db)
+
+  names(gene_motif_list) <- convert_to_genename(names(gene_motif_list),
+                                                db = db, remove.dup = FALSE)
+
+  # If genes.use is not provided, the default is all
+  if (is.null(genes.use)) {
+    genes.use <- names(gene_motif_list)
+  }
 
   # Slice the motif list and leave only the targets
   gene_motif_list <- gene_motif_list[names(gene_motif_list) %in% genes.use]

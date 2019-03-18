@@ -356,6 +356,8 @@ convert_gene_to_fbgn <- function(genes, db) {
   # 1. Matching current symbol
   # 2. Matching aliases
 
+  unordered <- FALSE
+
   ## Reading from the db
   if (!"symbol_dict" %in% names(db) | !"alias_dict" %in% names(db)) {
     stop(paste("The database list seems to be wrong. Please make sure that",
@@ -365,9 +367,8 @@ convert_gene_to_fbgn <- function(genes, db) {
   symbol_dict <- db[["symbol_dict"]]
   alias_dict <- db[["alias_dict"]]
 
-
   ## Remove mitochondrial genes
-  if (length(genes[!grepl("^mt:", genes)]) > 0) {
+  if (length(genes[grepl("^mt:", genes)]) > 0) {
     unordered <- TRUE
   }
   genes <- genes[!grepl("^mt:", genes)]
@@ -449,7 +450,7 @@ convert_gene_to_fbgn <- function(genes, db) {
 #' gtf.path = dummypath)
 #'
 #' convert_to_genename("FBgn0086917", testdb)
-convert_to_genename <- function(x, db, normalize = TRUE) {
+convert_to_genename <- function(x, db, normalize = TRUE, remove.dup = TRUE) {
   if (!"to_name_dict" %in% names(db)) {
     stop(paste("The database list seems to be wrong. Please make sure that",
                "you generated it by make_database() before using gene",
@@ -478,12 +479,14 @@ convert_to_genename <- function(x, db, normalize = TRUE) {
   }
 
   # Examine duplication
-  dup_all <- Reduce(`|`, duplicated(x))
-  if (dup_all) {
-    x <- unique(x)
-    warning(paste("There are duplications of genes in your input, and",
-                  "duplicated items are removed. As a result, the order and",
-                  "length of output won't be the same as the input."))
+  if (remove.dup) {
+    dup_all <- Reduce(`|`, duplicated(x))
+    if (dup_all) {
+      x <- unique(x)
+      warning(paste("There are duplications of genes in your input, and",
+                    "duplicated items are removed. As a result, the order and",
+                    "length of output won't be the same as the input."))
+    }
   }
 
   # Convert to gene name
