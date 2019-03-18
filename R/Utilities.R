@@ -66,7 +66,7 @@ calculate_gene_cor <- function(data, gene1, gene2,
   # The genes are selected based on column names
   if (!is.matrix(data) & !is.data.frame(data)) {
     stop(paste("calculate_gene_core() only takes a matrix or",
-               "a data frame as input data."))
+               "a data frame as input data.\n"))
   }
   if (use.row) {
     gene_names <- row.names(data)
@@ -76,10 +76,10 @@ calculate_gene_cor <- function(data, gene1, gene2,
 
   # Make sure the gene names are in the expression matrices
   if (!(gene1 %in% gene_names)) {
-    stop(gene1, " is not found in the expression matrix.")
+    stop(gene1, " is not found in the expression matrix.\n")
   }
   if (!(gene2 %in% gene_names)) {
-    stop(gene2, " is not found in the expression matrix.")
+    stop(gene2, " is not found in the expression matrix.\n")
   }
 
   if (use.row) {
@@ -136,7 +136,7 @@ get_gene_names <- function(x, ...) {
 get_gene_names.default <- function(x, use.row = FALSE, ...) {
   # Type check
   if (!(is.data.frame(x) | is.matrix(x))) {
-    stop("Sorry, the object is not supported by get_gene_names().")
+    stop("Sorry, the object is not supported by get_gene_names().\n")
   }
   if (use.row) {
     return(row.names(x))

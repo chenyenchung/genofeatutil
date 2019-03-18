@@ -100,7 +100,7 @@ make_database <- function(species = "dmel", gtf.path, version = NULL) {
 #' @return a list containing data frames and character strings of meta data
 prepare_database <- function(species = "dmel", gtf.path, version = NULL) {
   if (!species %in% c("dmel", "test")) {
-    stop("prepare_database does not support ", species, " now.")
+    stop("prepare_database does not support ", species, " now.\n")
   }
   # Load GTF file (contains gene id and names)
   id_mapping <- rtracklayer::import(gtf.path)
@@ -150,7 +150,7 @@ generate_flybase_sym <- function(db) {
   if (!"syno" %in% names(db)) {
     stop(paste("The database list seems to be wrong. Please make sure that",
                "you generated it by prepare_database() before using gene",
-               "name conversion functions."))
+               "name conversion functions.\n"))
   }
 
   fbsym <- db[["syno"]]
@@ -210,7 +210,7 @@ generate_fbid_version_table <- function(db) {
   if (!"fbid" %in% names(db)) {
     stop(paste("The database list seems to be wrong. Please make sure that",
                "you generated it by prepare_database() before using gene",
-               "name conversion functions."))
+               "name conversion functions.\n"))
   }
 
   # Read the FBgn annotation table from FlyBase
@@ -218,7 +218,7 @@ generate_fbid_version_table <- function(db) {
 
   # Report the version used
   version <- db[["metadata"]]["FlyBase_ver"]
-  message("Using FlyBase version: ", version, " to update FBgn.")
+  message("Using FlyBase version: ", version, " to update FBgn.\n")
 
   # Generate a conversion vector
   query <- id_table$`secondary_FBgn#(s)`
@@ -262,7 +262,7 @@ generate_gene_mapping <- function(db) {
   if (!"gtf" %in% names(db)) {
     stop(paste("The database list seems to be wrong. Please make sure that",
                "you generated it by prepare_database() before using gene",
-               "name conversion functions."))
+               "name conversion functions.\n"))
   }
   id_mapping <- db[["gtf"]]
 
@@ -271,7 +271,7 @@ generate_gene_mapping <- function(db) {
     if (!"id_dict" %in% names(db)) {
       stop(paste("An id conversion table is required to update FlyBase gene",
                  "numbers. If you see this error message, it could be an error",
-                 "in an internal function, generate_fbid_version_table()."))
+                 "in an internal function, generate_fbid_version_table().\n"))
     }
     id_mapping$gene_id <- update_fbgn(id_mapping$gene_id, db = db)
   }
@@ -309,7 +309,7 @@ update_fbgn <- function (id, db) {
   } else {
     stop(paste("The database list seems to be wrong. Please make sure that",
                "you generated it by make_database() before using gene",
-               "name conversion functions."))
+               "name conversion functions.\n"))
   }
 
   ## Find FBid that need conversion
@@ -362,7 +362,7 @@ convert_gene_to_fbgn <- function(genes, db) {
   if (!"symbol_dict" %in% names(db) | !"alias_dict" %in% names(db)) {
     stop(paste("The database list seems to be wrong. Please make sure that",
                "you generated it by make_database() before using gene",
-               "name conversion functions."))
+               "name conversion functions.\n"))
   }
   symbol_dict <- db[["symbol_dict"]]
   alias_dict <- db[["alias_dict"]]
@@ -392,7 +392,7 @@ convert_gene_to_fbgn <- function(genes, db) {
       warning(paste0("'", denormalize_genename(item),
                      "' is matched with multiple aliases. All the FBgn ",
                      "that correspond to it will be append to the end ",
-                     "of the result.")
+                     "of the result.\n")
       )
 
       # Create a vector of the rest of the alias:FBgn pair a non-unique
@@ -416,12 +416,12 @@ convert_gene_to_fbgn <- function(genes, db) {
     unmapped <- paste(unmapped, collapse = ", ")
     warning(paste("Please note the following genes are not found in",
                   "the database and won't be processed:",
-                   denormalize_genename(unmapped), "."))
+                   denormalize_genename(unmapped), ".\n"))
   }
   if (unordered) {
     message(paste("Please note that the conversion result of",
                   "convert_gene_to_fbgn might not retain the same",
-                  "order of the vector of gene names that are converted."))
+                  "order of the vector of gene names that are converted.\n"))
   }
   return(genes)
 }
@@ -456,11 +456,12 @@ convert_to_genename <- function(x, db, normalize = TRUE, remove.dup = TRUE) {
   if (!"to_name_dict" %in% names(db)) {
     stop(paste("The database list seems to be wrong. Please make sure that",
                "you generated it by make_database() before using gene",
-               "name conversion functions."))
+               "name conversion functions.\n"))
   }
 
   if (length(x) == 0) {
-    stop("There is no gene names or FlyBase gene numbers provided to convert.")
+    stop(paste("There is no gene names or FlyBase gene",
+               "numbers provided to convert.\n"))
   }
 
   genename_index <- !distinguish_fbgn(x)
@@ -483,7 +484,7 @@ convert_to_genename <- function(x, db, normalize = TRUE, remove.dup = TRUE) {
       x <- c(x[!genename_index], converted_names)
       warning(paste("Because there were multiple mappings of the aliases,",
                     "please note that the length and  order of the output is",
-                    "different from the input."))
+                    "different from the input.\n"))
     }
   }
 
@@ -494,7 +495,7 @@ convert_to_genename <- function(x, db, normalize = TRUE, remove.dup = TRUE) {
       x <- unique(x)
       warning(paste("There are duplications of genes in your input, and",
                     "duplicated items are removed. As a result, the order and",
-                    "length of output won't be the same as the input."))
+                    "length of output won't be the same as the input.\n"))
     }
   }
 
@@ -509,7 +510,7 @@ convert_to_genename <- function(x, db, normalize = TRUE, remove.dup = TRUE) {
     result <- dict[mapped]
     warning(paste("The following FlyBase gene numbers are not found in the",
                   "GTF file you loaded:",
-                  paste(x[!mapped_index], collapse = ", ")))
+                  paste(x[!mapped_index], collapse = ", "), ".\n"))
   }
 
   if (normalize) {
@@ -526,7 +527,7 @@ convert_to_genename <- function(x, db, normalize = TRUE, remove.dup = TRUE) {
 distinguish_fbgn <- function(x) {
   if (!is.character(x)) {
     stop(paste("distinguish_fbgn() takes only a character vector of FlyBase",
-               "gene numbers or gene names"))
+               "gene numbers or gene names\n"))
   }
   FBgn_index <- grepl("^FBgn", x)
   return(FBgn_index)

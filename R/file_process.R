@@ -36,7 +36,7 @@ load_rdata <- function(file) {
   ## Remind the user if more than one variable is in the file.
   if (length(obj_name) > 1) {
     stop(paste("This .rdata file contains more than 1 object and is likely to",
-               "be an environment. Please load it with load()."))
+               "be an environment. Please load it with load().\n"))
   }
   ## Return the variable to allow assignment
   object <- get(obj_name)
@@ -69,7 +69,7 @@ versaread <- function(file, type) {
   # It is only expecting a marker list for .csv files though
   ## Check argument type
   if (!type %in% c("rds", "rdata", "csv")) {
-    stop("type should be either 'csv', 'rds', or 'rdata'.")
+    stop("type should be either 'csv', 'rds', or 'rdata'.\n")
   }
   if (type == "rds") {
     object <- readRDS(file)

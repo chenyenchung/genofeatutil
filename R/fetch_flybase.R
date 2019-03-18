@@ -23,12 +23,12 @@ get_fbase_url <- function(version = NULL, dirstr = NULL) {
   if (is.null(version)) {
     version <- filelist[nrow(filelist), ncol(filelist)]
   }
-  message(paste0("Retrieving URL for ", version, "."))
+  message(paste0("Retrieving URL for ", version, ".\n"))
 
   # Check if the version number is legal
   if (!grepl("^FB[0-9]{4}_[0-9]{2}", version)) {
     stop(paste("The format for version number seems to be wrong.",
-               "It is FB[year]_[month] (e.g., 'FB2019_01')."))
+               "It is FB[year]_[month] (e.g., 'FB2019_01').\n"))
   }
 
   # Extract available version on the server
@@ -38,7 +38,7 @@ get_fbase_url <- function(version = NULL, dirstr = NULL) {
   if (!version %in% ver_list) {
     msg <- paste0("The version is not available on FlyBase. ",
                   "Please try the follows: ",
-                  paste(ver_list, collapse = ", "), ".")
+                  paste(ver_list, collapse = ", "), ".\n")
     stop(msg)
   }
 
