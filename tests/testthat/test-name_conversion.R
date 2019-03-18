@@ -191,12 +191,18 @@ test_that("convert_to_genename", {
                           gtf.path = dummypath)
   rawdb <- prepare_database(species = "test",
                             gtf.path = dummypath)
-  expect_error(convert_to_genename("Cha", db = rawdb))
+
+  # Check corrupted database
+  expect_error(convert_to_genename("gene_1", db = rawdb))
+
+  # Check null input
   expect_error(convert_to_genename(x = NULL , db = testdb))
-  expect_equivalent(convert_to_genename("FBgn0086917", testdb),
-               normalize_genename("spok"))
-  expect_equivalent(convert_to_genename("FBgn0086917", testdb,
+
+  # Check gene name translation
+  expect_equivalent(convert_to_genename("FBgn0000020", db = testdb),
+               normalize_genename("tf_3"))
+  expect_equivalent(convert_to_genename("alias_6.3", testdb,
                                         normalize = FALSE),
-               "spok")
+               "gene_6")
 
 })

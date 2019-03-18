@@ -463,6 +463,13 @@ convert_to_genename <- function(x, db, normalize = TRUE, remove.dup = TRUE) {
 
   genename_index <- !distinguish_fbgn(x)
 
+  # Update FBgn
+  if (db[["metadata"]]["species"] %in% c("dmel", "test")) {
+    if (sum(!genename_index) > 0) {
+      x[!genename_index] <- update_fbgn(x[!genename_index], db = db)
+    }
+  }
+
   if (length(which(genename_index)) > 0) {
     # Convert gene names to FBgn
     converted_names <- convert_gene_to_fbgn(x[genename_index], db)

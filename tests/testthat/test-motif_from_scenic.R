@@ -82,3 +82,4 @@ test_that("get_motif_info()", {
                             system.file("extdata", "top5_motif_info.rds",
                                         package = "genofeatutil"))
   })
+
