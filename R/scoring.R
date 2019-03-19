@@ -216,8 +216,69 @@ score_predictors <- function(x,
   return(result_df)
 }
 
-integrate_score <- function(..., column) {
+#' Integrate Score Tables
+#' \code{integrate_score()} takes one specified column from multiple data
+#' frames  containing the scores for prediction-target pair, and integrated
+#' them into a summary table, in which each column represents one table, and
+#' each row represents a prediction-target pair.
+#'
+#' @param ... named arguments of dataframes; the names will be used as column
+#' names in the result.
+#' @param column.name a character string indicating the column name containing
+#' the score to merge
+#' @param na.zero a logical value; if TRUE, NAs will be replaced by 0
+#'
+#' @return a data frame containing integrated scores of interest
+#' @export
+#'
+#' @examples
+#' Generate dummy data
+#' t1 <- data.frame("predictor" = c("tf_1", "tf_2", "tf_3"),
+#'                  "target" = c("gene_1", "gene_2", "gene_3"),
+#'                  "MSE" = c(1, 1, 0))
+#' t2 <- data.frame("predictor" = c("tf_1", "tf_2", "tf_3"),
+#'                  "target" = c("gene_1", "gene_2", "gene_3"),
+#'                  "MSE" = c(1, 0, 1))
+#' t3 <- data.frame("predictor" = c("tf_1", "tf_2", "tf_3", "tf_4"),
+#'                  "target" = c("gene_1", "gene_2", "gene_3", "gene_1"),
+#'                  "MSE" = c(0, 1, 1, 1))
+#'
+#' integrated_table <- integrate_score(t1 = t1, t2 = t2, t3 = t3,
+#'                                     column.name = "MSE")
+integrate_score <- function(..., column.name, na.zero = TRUE) {
+  df_list <- list(...)
+  # Type check
+    # Check the existance of column names
+  for (df in df_list) {
+    if (class(df) != "data.frame") {
+      stop("integrate_score() only takes data frames.\n")
+    }
+    if (!column.name %in% names(df)) {
+      stop("The column.name is not presented in every data frame.\n")
+    }
+  }
 
+  result_list <- lapply(names(df_list), function(name) {
+    df <- df_list[[name]]
+    result <- data.frame("ident" = paste(df$predictor, df$target, sep = "@"),
+                         stringsAsFactors = FALSE)
+    result[[name]] <-  df[[column.name]]
+    return(result)
+  })
+  merged <- Reduce(function(x, y) {merge(x, y, by = "ident", all = TRUE)},
+                   result_list)
+  if (na.zero) {
+    merged[is.na(merged)] <- 0
+  }
+
+  # Extract predictors and targets and make them two columns again
+  predictor <- sapply(strsplit(merged$ident, "@"), function(x) {x[1]})
+  target <- sapply(strsplit(merged$ident, "@"), function(x) {x[2]})
+
+  merged <- merged[ , colnames(merged) != "ident"]
+  merged <- data.frame(predictor, target, merged, stringsAsFactors = FALSE)
+
+  return(merged)
 }
 
 plot_score <- function() {

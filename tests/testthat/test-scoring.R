@@ -109,3 +109,35 @@ test_that("score_predictors()", {
     score_result
   )
 })
+
+test_that("integrate_score()", {
+  # Generate dummy data
+  t1 <- data.frame("predictor" = c("tf_1", "tf_2", "tf_3"),
+                   "target" = c("gene_1", "gene_2", "gene_3"),
+                   "MSE" = c(1, 1, 0))
+  t2 <- data.frame("predictor" = c("tf_1", "tf_2", "tf_3"),
+                   "target" = c("gene_1", "gene_2", "gene_3"),
+                   "MSE" = c(1, 0, 1))
+  t3 <- data.frame("predictor" = c("tf_1", "tf_2", "tf_3", "tf_4"),
+                   "target" = c("gene_1", "gene_2", "gene_3", "gene_1"),
+                   "MSE" = c(0, 1, 1, 1))
+
+  integrated_table <- integrate_score(t1 = t1, t2 = t2, t3 = t3,
+                                      column.name = "MSE")
+  # Type check
+  expect_error(integrate_score(t1 = as.matrix(t1), t2 = t2, t3 = t3,
+                               column.name = "MSE"))
+  # Check fake column name
+  expect_error(integrate_score(t1 = t1, t2 = t2, t3 = t3,
+                               column.name = "fake"))
+  # Check dims and class
+  expect_equal(class(integrated_table), "data.frame")
+  expect_equal(ncol(integrated_table), 5)
+
+  # Check na.processing
+  expect_equivalent(
+    is.na(integrate_score(t1 = t1, t2 = t2, t3 = t3,
+                          column.name = "MSE", na.zero = FALSE)),
+    matrix(data = c(rep(FALSE, 17), TRUE, TRUE, FALSE), ncol = 5, byrow = TRUE)
+  )
+})
