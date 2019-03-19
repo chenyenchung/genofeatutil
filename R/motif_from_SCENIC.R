@@ -16,7 +16,6 @@ motif_to_tf <- function(x, motif_db, db) {
   translated <- lapply(x, function(y) {
     match_row <- motif_tbl[ , 1] %in% y
     if (sum(match_row) > 0) {
-      print(sum(match_row) > 0)
       tfnames <- motif_tbl$gene_name[match_row]
       tfnames <- convert_to_genename(x = tfnames, db = db, remove.dup = FALSE)
       return(tfnames)
