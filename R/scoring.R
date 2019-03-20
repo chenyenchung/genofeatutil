@@ -301,6 +301,8 @@ integrate_score <- function(..., column.name, na.zero = TRUE) {
 #' @param plot.type a character string indicating whether a lineplot
 #' (\code{"line"}) or a heatmap (\code{"heatmap"}) should be generated
 #' @param title a character string indicating the title of the plot
+#' @param k.groups a numeric value indicating the number of clusters to form
+#' in hierarchical clustering for the predictor-target pairs
 #'
 #' @return a \code{ggplot2} object
 #' @export
@@ -326,7 +328,7 @@ integrate_score <- function(..., column.name, na.zero = TRUE) {
 #' plot_score(x = intedf, plot.type = "heatmap")
 plot_score <- function(x, facet = NULL, exp.order = NULL, cols.use = NULL,
                        predictors.use = NULL, targets.use = NULL,
-                       plot.type = "line", title = NULL) {
+                       plot.type = "line", title = NULL, k.groups = NULL) {
   # Check
   ## Type check
   if (class(x) != "data.frame") {
@@ -334,12 +336,22 @@ plot_score <- function(x, facet = NULL, exp.order = NULL, cols.use = NULL,
   }
 
   ## plot.type check
-  if (!plot.type %in% c("line", "heatmap")) {
-    stop("plot.type of plot_score() only supports 'line' or 'heatmap.'\n")
+  if (!plot.type %in% c("line", "heatmap", "tree")) {
+    stop(paste("plot.type of plot_score() only supports 'line',",
+               "'heatmap', or 'tree'.\n"))
+  }
+
+  ## k.groups check
+  if (!is.null(k.groups) && !is.numeric(k.groups)) {
+    stop("k.groups should be a number.\n")
+  }
+
+  if (is.null(k.groups) && !is.null(facet) && facet == "k") {
+    stop("k.groups needs to be set before faceting by k.\n")
   }
 
   ## facet check
-  if (!is.null(facet) && !facet %in% c("predictor", "target")) {
+  if (!is.null(facet) && !facet %in% c("predictor", "target", "k")) {
     stop("facet of plot_score() only supports 'target' or 'predictor'\n")
   }
 
@@ -364,6 +376,23 @@ plot_score <- function(x, facet = NULL, exp.order = NULL, cols.use = NULL,
                  ".\n"))
     }
     x <- x[x$predictor %in% predictors.use, ]
+  }
+
+  # Distance matrix for hierarchical ordering and clustering
+  row.names(x) <- paste(x$predictor, x$target)
+  dist_pairs <- stats::dist(x[ , !colnames(x) %in% c("predictor", "target")],
+                     method = "euclidean")
+  hc_pairs <- stats::hclust(dist_pairs)
+  pair_order <- hc_pairs$labels[hc_pairs$order]
+
+  if (!is.null(k.groups)) {
+    k_ident <- stats::cutree(hc_pairs, k = k.groups)
+  }
+
+  if (plot.type == "tree") {
+    base_plot <- ggdendro::ggdendrogram(hc_pairs, rotate = TRUE)
+    print(base_plot)
+    return(base_plot)
   }
 
   # Prepare a data.frame to plot
@@ -403,6 +432,11 @@ plot_score <- function(x, facet = NULL, exp.order = NULL, cols.use = NULL,
     plot_df$exp <- factor(plot_df$exp, levels = exp.order)
   }
   plot_df$ident <- paste(plot_df$predictor, plot_df$target)
+  plot_df$ident <- factor(plot_df$ident, levels = pair_order)
+  if (!is.null(k.groups)) {
+    plot_df$k <- k_ident[plot_df$ident]
+  }
+
 
 
   # Plotting
@@ -443,13 +477,13 @@ plot_score <- function(x, facet = NULL, exp.order = NULL, cols.use = NULL,
   if (!is.null(cols.use)) {
     if(length(cols.use) > 3) {
       warning("cols.use for heatmap only takes 3 colors to form a gradient.")
-      base_plot <- base_plot + ggplot2::scale_fill_gradient2(
-        low = cols.use[1], mid = cols.use[2], high = cols.use[3]
+      base_plot <- base_plot + ggplot2::scale_fill_gradientn(
+        colors = cols.use
       )
     }
   } else {
-    base_plot <- base_plot + ggplot2::scale_fill_gradient2(
-      low = "blue", mid = "white", high = "red"
+    base_plot <- base_plot + ggplot2::scale_fill_gradientn(
+      colors = c("blue", "white", "red")
     )
   }
 

@@ -168,6 +168,8 @@ test_that("plot_score()", {
   expect_error(plot_score(intedf, plot.type = "boxplot"))
   expect_error(plot_score(intedf, facet = "sky"))
   expect_error(plot_score(intedf, exp.order = c(1, 2, 3)))
+  expect_error(plot_score(intedf, k.groups = "2.5"))
+  expect_error(plot_score(intedf, facet = "k"))
 
   # Filter sanity check
   expect_error(plot_score(intedf, predictors.use = "nothere"))
@@ -180,5 +182,7 @@ test_that("plot_score()", {
   expect_equal_to_reference(plot_score(x = intedf, plot.type = "heatmap"),
                             system.file("extdata", "heatmap.rds",
                                         package = "genofeatutil"))
-
+  expect_equal_to_reference(plot_score(x = intedf, plot.type = "tree"),
+                            system.file("extdata", "treeplot.rds",
+                                        package = "genofeatutil"))
 })

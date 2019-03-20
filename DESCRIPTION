@@ -25,6 +25,7 @@ Imports:
     stats,
     utils,
     tidyr,
-    ggplot2
+    ggplot2,
+    ggdendro
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
