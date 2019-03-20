@@ -1,5 +1,6 @@
 context("test-scoring")
 
+# score_predictors() ------------------------------------------------------
 test_that("score_predictors()", {
   # Loading dummydb
   dummypath <- system.file("extdata", "dummy.gtf",
@@ -110,6 +111,9 @@ test_that("score_predictors()", {
   )
 })
 
+
+
+# integrate_score() -------------------------------------------------------
 test_that("integrate_score()", {
   # Generate dummy data
   t1 <- data.frame("predictor" = c("tf_1", "tf_2", "tf_3"),
@@ -140,4 +144,41 @@ test_that("integrate_score()", {
                           column.name = "MSE", na.zero = FALSE)),
     matrix(data = c(rep(FALSE, 17), TRUE, TRUE, FALSE), ncol = 5, byrow = TRUE)
   )
+})
+
+
+# plot_score() ------------------------------------------------------------
+
+test_that("plot_score()", {
+  intedf <- data.frame(
+    "predictor" = c("tf_1", "tf_2", "tf_3", "tf_4"),
+    "target" = c("gene_1", "gene_2", "gene_1", "gene_2"),
+    "t1" = c(0, 5, 1, 5),
+    "t2" = c(0, 3, 0, 1),
+    "t3" = c(0, 6, 2, 6),
+    "t4" = c(2, 7, 8, 9),
+    "t5" = c(9, 2, 2, 7),
+    stringsAsFactors = FALSE
+  )
+
+  # Type check
+  expect_error(plot_score(TRUE))
+
+  # Argument sanity check
+  expect_error(plot_score(intedf, plot.type = "boxplot"))
+  expect_error(plot_score(intedf, facet = "sky"))
+  expect_error(plot_score(intedf, exp.order = c(1, 2, 3)))
+
+  # Filter sanity check
+  expect_error(plot_score(intedf, predictors.use = "nothere"))
+  expect_error(plot_score(intedf, targets.use = "nothere"))
+
+  # General output check
+  expect_equal_to_reference(plot_score(x = intedf, plot.type = "line"),
+                            system.file("extdata", "lineplot.rds",
+                                        package = "genofeatutil"))
+  expect_equal_to_reference(plot_score(x = intedf, plot.type = "heatmap"),
+                            system.file("extdata", "heatmap.rds",
+                                        package = "genofeatutil"))
+
 })
