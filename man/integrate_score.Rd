@@ -30,7 +30,7 @@ them into a summary table, in which each column represents one table, and
 each row represents a prediction-target pair.
 }
 \examples{
-Generate dummy data
+# Generate dummy data
 t1 <- data.frame("predictor" = c("tf_1", "tf_2", "tf_3"),
                  "target" = c("gene_1", "gene_2", "gene_3"),
                  "MSE" = c(1, 1, 0))

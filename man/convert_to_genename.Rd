@@ -32,5 +32,5 @@ package = "genofeatutil")
 testdb <- make_database(species = "test",
 gtf.path = dummypath)
 
-convert_to_genename("FBgn0086917", testdb)
+convert_to_genename("FBgn0000001", testdb)
 }

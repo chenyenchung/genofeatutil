@@ -63,8 +63,8 @@ denormalize_genename <- function(gene) {
 #' @examples
 #' dummypath <- system.file("extdata", "dummy.gtf",
 #' package = "genofeatutil")
-#' dmeldb <- make_database(species = "dmel",
-#'                            gtf.path = dummypath)
+#' dmeldb <- make_database(species = "test",
+#'                         gtf.path = dummypath)
 make_database <- function(species = "dmel", gtf.path, version = NULL) {
   db <- prepare_database(species = species,
                          gtf.path = gtf.path,
@@ -298,9 +298,9 @@ generate_gene_mapping <- function(db) {
 #' @examples
 #' dummypath <- system.file("extdata", "dummy.gtf",
 #' package = "genofeatutil")
-#' dmeldb <- make_database(species = "dmel",
-#'                            gtf.path = dummypath)
-#' update_fbgn("FBgn0032045", db = dmeldb)
+#' dmeldb <- make_database(species = "test",
+#'                         gtf.path = dummypath)
+#' update_fbgn("FBgn0000020", db = dmeldb)
 update_fbgn <- function (id, db) {
   # Convert out-dated FBid to current version
   ## Load lookup table
@@ -470,7 +470,7 @@ convert_gene_to_fbgn <- function(genes, db) {
 #' testdb <- make_database(species = "test",
 #' gtf.path = dummypath)
 #'
-#' convert_to_genename("FBgn0086917", testdb)
+#' convert_to_genename("FBgn0000001", testdb)
 convert_to_genename <- function(x, db, normalize = TRUE, remove.dup = TRUE) {
   if (!"to_name_dict" %in% names(db)) {
     stop(paste("The database list seems to be wrong. Please make sure that",

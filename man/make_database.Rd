@@ -30,6 +30,6 @@ loaded data.
 \examples{
 dummypath <- system.file("extdata", "dummy.gtf",
 package = "genofeatutil")
-dmeldb <- make_database(species = "dmel",
-                           gtf.path = dummypath)
+dmeldb <- make_database(species = "test",
+                        gtf.path = dummypath)
 }

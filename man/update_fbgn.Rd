@@ -22,7 +22,7 @@ to the list.
 \examples{
 dummypath <- system.file("extdata", "dummy.gtf",
 package = "genofeatutil")
-dmeldb <- make_database(species = "dmel",
-                           gtf.path = dummypath)
-update_fbgn("FBgn0032045", db = dmeldb)
+dmeldb <- make_database(species = "test",
+                        gtf.path = dummypath)
+update_fbgn("FBgn0000020", db = dmeldb)
 }
