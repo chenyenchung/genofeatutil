@@ -312,8 +312,27 @@ update_fbgn <- function (id, db) {
                "name conversion functions.\n"))
   }
 
+  if (!"symbol_dict" %in% names(db)) {
+    stop(paste("The database list seems to be wrong. Please make sure that",
+               "you generated it by make_database() before using gene",
+               "name conversion functions.\n"))
+  }
+
   ## Find FBid that need conversion
   index_update <- id %in% names(version_dict)
+
+  ## Check illegal FBids
+  if (!Reduce(`&`, index_update)) {
+    noconvert <- id[!index_update]
+    legal <- noconvert %in% db[["symbol_dict"]]
+    if (!Reduce(`&`, legal)) {
+      stop(paste("The following FlyBase gene number(s) are not found in",
+                 "the database (", db[["metadata"]]["version"], "):",
+                 paste(noconvert[!legal], sep = ", "), ".\n"))
+    }
+  }
+
+
   ## Convert with lookup table while keeping the order
   result <- sapply(seq(length(id)), function (x) {
     if (index_update[x]) {

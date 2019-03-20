@@ -97,6 +97,7 @@ test_that("generate_gene_mapping", {
   testdb <- prepare_database(species = "test",
                              gtf.path = dummypath)
   testdb <- generate_fbid_version_table(testdb)
+  testdb <- generate_flybase_sym(testdb)
 
   # Prepare dummy data
   notgtf <- testdb[names(testdb) != "gtf"]
