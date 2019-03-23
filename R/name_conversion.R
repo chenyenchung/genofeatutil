@@ -369,7 +369,8 @@ update_fbgn <- function (id, db) {
 #' gtf.path = dummypath)
 #'
 #' # Convert gene names
-#' convert_gene_to_fbgn("CG31610", db = testdb)
+#' query <- c("gene_1", "alias_2.1", "mt:dummy", "alias_3.3", "gene_21")
+#' convert_gene_to_fbgn(query[1:4], db = testdb)
 convert_gene_to_fbgn <- function(genes, db) {
   # Separate gene names to 2 categories and convert to FBgn
   # 1. Matching current symbol
