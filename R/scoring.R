@@ -217,6 +217,7 @@ score_predictors <- function(x,
 }
 
 #' Integrate Score Tables
+#'
 #' \code{integrate_score()} takes one specified column from multiple data
 #' frames  containing the scores for prediction-target pair, and integrated
 #' them into a summary table, in which each column represents one table, and
@@ -299,7 +300,8 @@ integrate_score <- function(..., column.name, na.zero = TRUE) {
 #' @param predictors.use a character vector indicating the predictors to plot
 #' @param targets.use a character vector indicating the predictors to plot
 #' @param plot.type a character string indicating whether a lineplot
-#' (\code{"line"}) or a heatmap (\code{"heatmap"}) should be generated
+#' (\code{"line"}), a heatmap (\code{"heatmap"}), or a hierarchy tree
+#' (\code{"tree"})should be generated
 #' @param title a character string indicating the title of the plot
 #' @param k.groups a numeric value indicating the number of clusters to form
 #' in hierarchical clustering for the predictor-target pairs

@@ -27,7 +27,8 @@ used in a heatmap to represent low, mid, and high value respectively}
 \item{targets.use}{a character vector indicating the predictors to plot}
 
 \item{plot.type}{a character string indicating whether a lineplot
-(\code{"line"}) or a heatmap (\code{"heatmap"}) should be generated}
+(\code{"line"}), a heatmap (\code{"heatmap"}), or a hierarchy tree
+(\code{"tree"})should be generated}
 
 \item{title}{a character string indicating the title of the plot}
 

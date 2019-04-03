@@ -1,7 +1,7 @@
 Package: genofeatutil
 Type: Package
 Title: Utilities for genomic feature manipulation
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: person("Yen-Chung", "Chen", email = "ycc520@nyu.edu", 
                   role = c("aut", "cre"))
 Description:

@@ -2,11 +2,7 @@
 % Please edit documentation in R/scoring.R
 \name{integrate_score}
 \alias{integrate_score}
-\title{Integrate Score Tables
-\code{integrate_score()} takes one specified column from multiple data
-frames  containing the scores for prediction-target pair, and integrated
-them into a summary table, in which each column represents one table, and
-each row represents a prediction-target pair.}
+\title{Integrate Score Tables}
 \usage{
 integrate_score(..., column.name, na.zero = TRUE)
 }
@@ -23,7 +19,6 @@ the score to merge}
 a data frame containing integrated scores of interest
 }
 \description{
-Integrate Score Tables
 \code{integrate_score()} takes one specified column from multiple data
 frames  containing the scores for prediction-target pair, and integrated
 them into a summary table, in which each column represents one table, and
